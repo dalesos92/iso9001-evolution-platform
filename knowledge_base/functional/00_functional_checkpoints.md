@@ -13,6 +13,7 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
 | **CHK-003** | 2026-08-27 | *Agile / Kanban* | Lista de Deseos del Mercado (WSH-01 a 06), Modelo de Gobierno Scrum y Tablero Kanban Interactivo en Angular con métricas de velocidad. | ✅ **Aprobado & Compilado** | Agente Funcional & Dev |
 | **CHK-004** | 2026-08-27 | *Scrum / Governance* | Adopción integral de Scrum mediante Agente Scrum Master: Protocolo de Ceremonias, Daily Standup de Agentes, Sprint Goal y Control Interactivo de DoD. | ✅ **Aprobado & Compilado** | Agente Scrum Master & Dev |
 | **CHK-005** | 2026-08-27 | *DevSecOps / GitFlow* | Política oficial de versionamiento Git: Aislamiento obligatorio en ramas `feature/<ID>-<nombre>`, control de cambios y merge a `main` condicionado a aprobación explícita. | ✅ **Aprobado & Establecido** | Agente DevSecOps & Scrum Master |
+| **CHK-006** | 2026-08-27 | *Auditoría / Data Room* | Implementación de la Sala Virtual de Auditoría Express (WSH-03): Bóveda de evidencias oficiales (Cap 4-10), tokens temporales con expiración y verificación SHA-256. | 🚀 **Listo en Rama Feature** | Agente Dev & SecArch |
 
 ---
 
@@ -89,3 +90,19 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
 - **Validación:**
   - ✅ Incorporado a la Definición de Hecho (DoD) del Agente Scrum Master.
   - ✅ Sincronizado en `main`.
+
+---
+
+### 🔹 [CHK-006] Sala Virtual de Auditoría Express (WSH-03)
+- **Rama Feature:** `feature/WSH-03-virtual-audit-data-room`.
+- **Solicitud de Origen:** Implementación de la épica WSH-03: Data Room Virtual para auditorías ISO 9001 / ISO 19011.
+- **Aspectos Funcionales Entregados:**
+  1. **Bóveda Indexada por Cláusula:** Catálogo de evidencias de los Capítulos 4 al 10 con metadatos de custodio, fecha de última revisión y formato (.PDF, .XLSX, .Sheets).
+  2. **Control Criptográfico SHA-256:** Cada documento cuenta con su hash de verificación de integridad inmutable.
+  3. **Generador de Tokens de Acceso para Auditores:** Creación dinámica de enlaces de acceso temporal con expiración configurada a 72h.
+  4. **Modal de Inspección 1-Clic:** Visualización instantánea del extracto oficial y guía de auditoría ISO 19011 para cada evidencia.
+  5. **Medidor de Conformidad de Auditoría:** Cálculo del porcentaje de evidencias aprobadas y vigentes.
+- **Validación Técnica y de Seguridad (SSDLC Gates 1-5):**
+  - ✅ Compilación de producción exitosa (`ng build` - 76 kB transfer size).
+  - ✅ Aislamiento en rama `feature/WSH-03-virtual-audit-data-room`.
+  - 🛑 **Estado:** Esperando confirmación del usuario para merge a `main`.

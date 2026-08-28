@@ -18,7 +18,8 @@ knowledge_base/
 │   ├── 01_iso9001_domain_model.md            # Dominio normativo ISO 9001 y su evolución
 │   ├── 02_plain_language_engine.md           # Criterios del motor de simplificación (Poka-Yoke)
 │   ├── 03_market_wishlist_and_trends.md      # Lista de Deseos del Mercado y Tendencias ISO
-│   └── 04_scrum_backlog_model.md             # Modelo de Backlog Scrum y Flujo Kanban SSDLC
+│   ├── 04_scrum_backlog_model.md             # Modelo de Backlog Scrum y Flujo Kanban SSDLC
+│   └── 05_virtual_audit_data_room.md         # Bóveda de Auditoría y Acceso Temporal (WSH-03)
 └── security_ssdlc/
     └── 00_security_gates_and_checkpoints.md  # Puertas de enlace de seguridad por fase E2E
 ```

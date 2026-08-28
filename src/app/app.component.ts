@@ -53,6 +53,22 @@ export interface TemplateItem {
   fields: string[];
 }
 
+export interface AuditEvidence {
+  id: string;
+  clause: string;
+  chapter: number;
+  chapterTitle: string;
+  title: string;
+  fileType: 'PDF' | 'XLSX' | 'DOCX' | 'Notion' | 'Sheets';
+  lastUpdated: string;
+  owner: string;
+  status: 'approved' | 'review' | 'expired';
+  hash: string;
+  summary: string;
+  auditorCheckNote: string;
+  contentSnippet: string;
+}
+
 export type KanbanColumnId = 'backlog' | 'prioritized' | 'in_progress' | 'qa' | 'done';
 
 export interface KanbanItem {
@@ -93,6 +109,138 @@ export class AppComponent {
 
   // Search Filter
   searchTerm: string = '';
+
+  // Data Room Virtual State (WSH-03)
+  selectedAuditChapter: number | 'all' = 'all';
+  selectedAuditStatus: string = 'all';
+  auditSearchTerm: string = '';
+  activeEvidenceModal: AuditEvidence | null = null;
+  auditorTokenGenerated: string | null = null;
+  tokenCopiedMessage: boolean = false;
+
+  // Master Evidences List for Data Room
+  auditEvidences: AuditEvidence[] = [
+    {
+      id: 'EVD-401',
+      clause: '4.1 & 4.2',
+      chapter: 4,
+      chapterTitle: 'Contexto de la Organización',
+      title: 'Matriz DOFA, PESTEL & Evaluación de Cambio Climático (2024)',
+      fileType: 'XLSX',
+      lastUpdated: '2026-08-15',
+      owner: 'Gerencia General & SGC Lead',
+      status: 'approved',
+      hash: 'sha256-a9f3b20c81e7d441',
+      summary: 'Análisis detallado de factores externos e internos con inclusión explícita del análisis de pertinencia climática requerido por la enmienda 2024.',
+      auditorCheckNote: 'Verificar fecha de revisión directiva y conclusión explícita sobre cambio climático.',
+      contentSnippet: 'Registro oficial: Evaluación de 14 cuestiones externas y 8 internas. Conclusión Climática: Riesgo moderado en cadena de suministro por temporales en transporte marítimo mitigado con stock de seguridad.'
+    },
+    {
+      id: 'EVD-402',
+      clause: '4.3 & 4.4',
+      chapter: 4,
+      chapterTitle: 'Contexto de la Organización',
+      title: 'Declaración del Alcance del SGC y Mapa de Procesos E2E',
+      fileType: 'PDF',
+      lastUpdated: '2026-06-10',
+      owner: 'Líder SGC',
+      status: 'approved',
+      hash: 'sha256-55c9118fe9a12b40',
+      summary: 'Documento de alcance que detalla los límites físicos, digitales y la justificación de no aplicabilidad de requisitos (ej. diseño de hardware).',
+      auditorCheckNote: 'Confirmar coherencia entre el alcance declarado y las sedes auditadas.',
+      contentSnippet: 'Alcance: "Desarrollo, comercialización y soporte de plataformas cloud de gestión de la calidad para el sector empresarial".'
+    },
+    {
+      id: 'EVD-501',
+      clause: '5.2 & 5.3',
+      chapter: 5,
+      chapterTitle: 'Liderazgo y Compromiso',
+      title: 'Política de Calidad Firmada y Organigrama con Roles y Responsabilidades',
+      fileType: 'PDF',
+      lastUpdated: '2026-07-01',
+      owner: 'Director General',
+      status: 'approved',
+      hash: 'sha256-78d1042ab88c001f',
+      summary: 'Política de calidad alineada a la dirección estratégica, firmada por la máxima autoridad y comunicada al 100% del personal.',
+      auditorCheckNote: 'Entrevistar a 2 colaboradores operativos para verificar comprensión de la política.',
+      contentSnippet: 'Política: "Nos comprometemos a entregar soluciones de gestión de calidad intuitivas, a prueba de fallos y con 99.9% de disponibilidad, impulsando la mejora continua..."'
+    },
+    {
+      id: 'EVD-601',
+      clause: '6.1',
+      chapter: 6,
+      chapterTitle: 'Planificación',
+      title: 'Matriz de Riesgos y Oportunidades del Negocio (ISO 31000)',
+      fileType: 'Sheets',
+      lastUpdated: '2026-08-01',
+      owner: 'Comité de Riesgos & SGC',
+      status: 'approved',
+      hash: 'sha256-bc90441ef3381a99',
+      summary: 'Identificación de 18 riesgos operativos, de ciberseguridad y de clima, con planes de contingencia y reevaluación semestral.',
+      auditorCheckNote: 'Verificar efectividad de acciones tomadas para los 3 riesgos de mayor severidad.',
+      contentSnippet: 'Riesgo Crítico R-03: Indisponibilidad de proveedor de nube. Acción: Despliegue multi-zona en Vercel/AWS con replicación en tiempo real.'
+    },
+    {
+      id: 'EVD-701',
+      clause: '7.2 & 7.3',
+      chapter: 7,
+      chapterTitle: 'Apoyo y Recursos',
+      title: 'Matriz de Competencias, Perfiles de Cargo y Plan Anual de Capacitación',
+      fileType: 'XLSX',
+      lastUpdated: '2026-05-20',
+      owner: 'Talento Humano',
+      status: 'approved',
+      hash: 'sha256-44e21a009bc87123',
+      summary: 'Evaluaciones de competencia del 100% del personal clave y certificados del curso de Auditor Interno ISO 19011.',
+      auditorCheckNote: 'Revisar certificados de formación de los auditores internos.',
+      contentSnippet: '18 colaboradores evaluados; 100% de cumplimiento en inducción de calidad y formación en seguridad de la información.'
+    },
+    {
+      id: 'EVD-801',
+      clause: '8.4',
+      chapter: 8,
+      chapterTitle: 'Operación',
+      title: 'Registro de Evaluación y Homologación de Proveedores Críticos',
+      fileType: 'PDF',
+      lastUpdated: '2026-08-10',
+      owner: 'Compras & Operaciones',
+      status: 'approved',
+      hash: 'sha256-990a14fb67c29e41',
+      summary: 'Criterios de selección, SLAs acordados y reevaluación anual de proveedores de infraestructura, telecomunicaciones y asesoría.',
+      auditorCheckNote: 'Verificar orden de compra y evidencia de seguimiento a proveedores con calificación < 80%.',
+      contentSnippet: 'Evaluación anual de 8 proveedores críticos. Calificación promedio: 94/100. Proveedor de hosting verificado con SOC2 y SLA 99.99%.'
+    },
+    {
+      id: 'EVD-901',
+      clause: '9.2 & 9.3',
+      chapter: 9,
+      chapterTitle: 'Evaluación del Desempeño',
+      title: 'Informe de Auditoría Interna 2026 y Acta de Revisión por la Dirección',
+      fileType: 'PDF',
+      lastUpdated: '2026-08-20',
+      owner: 'Auditor Líder & Gerencia General',
+      status: 'approved',
+      hash: 'sha256-11f82cb90147ae55',
+      summary: 'Ciclo completo de auditoría interna bajo ISO 19011 y reunión directiva de evaluación de indicadores de calidad y satisfacción de clientes.',
+      auditorCheckNote: 'Verificar que todos los procesos fueron auditados y que la Dirección evaluó los recursos necesarios.',
+      contentSnippet: 'Auditoría Interna ejecutada del 10 al 14 de Agosto 2026. Hallazgos: 2 No Conformidades menores (cerradas eficazmente) y 4 Oportunidades de Mejora.'
+    },
+    {
+      id: 'EVD-101',
+      clause: '10.2',
+      chapter: 10,
+      chapterTitle: 'Mejora Continua',
+      title: 'Libro de No Conformidades, Análisis de Causa Raíz (5 Porqués) y Cierres',
+      fileType: 'Sheets',
+      lastUpdated: '2026-08-22',
+      owner: 'Líder SGC & Dueños de Proceso',
+      status: 'approved',
+      hash: 'sha256-ee0498b31a89c204',
+      summary: 'Registro trazable de incidencias, acciones correctivas inmediatas, análisis de causa raíz y verificación de no recurrencia.',
+      auditorCheckNote: 'Validar que las acciones correctivas eliminaron la causa raíz y no solo el síntoma.',
+      contentSnippet: 'NC-2026-02: Demora en entrega de informe de satisfacción. Causa Raíz: Falta de automatización de encuestas. Acción: Implementación de formulario webhook.'
+    }
+  ];
 
   // Kanban Filter States
   selectedKanbanEpic: string = 'all';
@@ -254,13 +402,13 @@ export class AppComponent {
     {
       id: 'WSH-03',
       title: 'Data Room Virtual de Auditoría Express (Acceso 1-Clic)',
-      description: 'Bóveda centralizada indexada por cláusula donde el auditor externo consulta evidencias con permisos temporales.',
-      columnId: 'prioritized',
+      description: 'Bóveda centralizada indexada por cláusula con tokens temporales de acceso para auditores y verificación SHA-256.',
+      columnId: 'done',
       epic: 'Auditoría & Evidencias',
       priority: 'P1',
       storyPoints: 5,
-      ssdlcGate: 'Gate 1',
-      assigneeAgent: '🕵️ Agente Funcional'
+      ssdlcGate: 'Gate 5',
+      assigneeAgent: '💻 Dev Seguro & SecArch'
     },
     {
       id: 'WSH-04',
@@ -741,6 +889,55 @@ export class AppComponent {
   // Scrum Master Action: Execute Daily Standup Simulation
   executeDaily() {
     this.dailyExecutionMessage = `⚡ Daily Standup completado a las ${new Date().toLocaleTimeString()} - Todos los agentes sincronizados. Velocidad actual: ${this.completedStoryPoints}/${this.totalStoryPoints} pts (${this.sprintProgressPercent}%). Cero bloqueos detectados.`;
+  }
+
+  // -------------------------------------------------------------
+  // DATA ROOM VIRTUAL (WSH-03) METHODS & GETTERS
+  // -------------------------------------------------------------
+
+  get filteredEvidences(): AuditEvidence[] {
+    return this.auditEvidences.filter(ev => {
+      const matchChapter = this.selectedAuditChapter === 'all' || ev.chapter === this.selectedAuditChapter;
+      const matchStatus = this.selectedAuditStatus === 'all' || ev.status === this.selectedAuditStatus;
+      const matchSearch = !this.auditSearchTerm.trim() || 
+        ev.id.toLowerCase().includes(this.auditSearchTerm.toLowerCase()) ||
+        ev.title.toLowerCase().includes(this.auditSearchTerm.toLowerCase()) ||
+        ev.clause.toLowerCase().includes(this.auditSearchTerm.toLowerCase()) ||
+        ev.owner.toLowerCase().includes(this.auditSearchTerm.toLowerCase());
+
+      return matchChapter && matchStatus && matchSearch;
+    });
+  }
+
+  get auditReadinessPercent(): number {
+    const total = this.auditEvidences.length;
+    if (total === 0) return 0;
+    const approved = this.auditEvidences.filter(ev => ev.status === 'approved').length;
+    return Math.round((approved / total) * 100);
+  }
+
+  generateAuditorToken() {
+    const randomHex = Math.random().toString(16).substring(2, 10);
+    this.auditorTokenGenerated = `https://iso9001-evolution.vercel.app/audit-room?token=audit_exp_72h_${randomHex}`;
+    this.tokenCopiedMessage = false;
+  }
+
+  copyAuditorToken() {
+    if (this.auditorTokenGenerated) {
+      navigator.clipboard.writeText(this.auditorTokenGenerated).catch(() => {});
+      this.tokenCopiedMessage = true;
+      setTimeout(() => {
+        this.tokenCopiedMessage = false;
+      }, 3000);
+    }
+  }
+
+  openEvidenceModal(ev: AuditEvidence) {
+    this.activeEvidenceModal = ev;
+  }
+
+  closeEvidenceModal() {
+    this.activeEvidenceModal = null;
   }
 
   toggleDodItem(item: { id: string; label: string; done: boolean; gate: string }) {

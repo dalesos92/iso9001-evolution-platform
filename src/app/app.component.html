@@ -15,7 +15,8 @@
       <a (click)="scrollTo('comparador')" class="nav-link">Comparador Diff</a>
       <a (click)="scrollTo('traductor')" class="nav-link">Ficha Humana (ELI5)</a>
       <a (click)="scrollTo('gap-analysis')" class="nav-link">Gap Analysis</a>
-      <a (click)="scrollTo('kanban')" class="nav-link highlight-link">📌 Tablero Scrum</a>
+      <a (click)="scrollTo('dataroom')" class="nav-link highlight-link">📁 Data Room</a>
+      <a (click)="scrollTo('kanban')" class="nav-link">📌 Tablero Scrum</a>
       <a (click)="scrollTo('templates')" class="nav-link">Kits de Adopción</a>
       <a (click)="scrollTo('ssdlc')" class="nav-link">Gobernanza SSDLC</a>
     </nav>
@@ -716,9 +717,181 @@
           </p>
         </div>
 
-        <button (click)="scrollTo('templates')" class="btn btn-primary btn-block">
-          <span>📦 Descargar Kits de Cierre de Brechas</span>
+        <button (click)="scrollTo('dataroom')" class="btn btn-primary btn-block">
+          <span>📁 Explorar Evidencias en Data Room</span>
         </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     SECTION: VIRTUAL AUDIT DATA ROOM (WSH-03)
+     ========================================================================== -->
+<section id="dataroom" class="section-padding dataroom-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge badge-emerald">Módulo Especial • Épica WSH-03</span>
+      <h2 class="section-title">Sala Virtual de Auditoría Express (Data Room)</h2>
+      <p class="section-desc">
+        Bóveda centralizada de evidencias oficiales organizadas por capítulos de la norma ISO 9001. Acceso en 1 clic para auditores externos con control de integridad SHA-256.
+      </p>
+    </div>
+
+    <!-- Data Room Health & Token Generator Banner -->
+    <div class="dataroom-top-panel glass-panel">
+      <div class="dataroom-stats-row">
+        <div class="dataroom-stat">
+          <span class="stat-title">Preparación para Auditoría:</span>
+          <span class="stat-val text-emerald">{{ auditReadinessPercent }}% Conforme</span>
+        </div>
+        <div class="dataroom-stat">
+          <span class="stat-title">Evidencias Indexadas:</span>
+          <span class="stat-val text-cyan">{{ auditEvidences.length }} Documentos</span>
+        </div>
+        <div class="dataroom-stat">
+          <span class="stat-title">Integridad Criptográfica:</span>
+          <span class="stat-val text-emerald">🔒 SHA-256 Verificado</span>
+        </div>
+        <div class="dataroom-stat">
+          <button (click)="generateAuditorToken()" class="btn btn-primary btn-sm">
+            <span>🔑 Generar Enlace Temporal para Auditor</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Active Token Box (if generated) -->
+      <div *ngIf="auditorTokenGenerated" class="token-active-box glass-panel animate-fade-in">
+        <div class="token-info">
+          <span class="badge badge-emerald">Token Activo (Expira en 72h)</span>
+          <code class="token-url">{{ auditorTokenGenerated }}</code>
+        </div>
+        <div class="token-actions">
+          <button (click)="copyAuditorToken()" class="btn btn-secondary btn-sm">
+            <span>📋 {{ tokenCopiedMessage ? '¡Enlace Copiado!' : 'Copiar Enlace' }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Room Filter Bar -->
+    <div class="dataroom-filters glass-panel">
+      <!-- Chapter Pills -->
+      <div class="chapter-pills-row">
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 'all'"
+          (click)="selectedAuditChapter = 'all'">
+          Todos los Capítulos
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 4"
+          (click)="selectedAuditChapter = 4">
+          Cap. 4 Contexto & Clima
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 5"
+          (click)="selectedAuditChapter = 5">
+          Cap. 5 Liderazgo
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 6"
+          (click)="selectedAuditChapter = 6">
+          Cap. 6 Planificación
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 7"
+          (click)="selectedAuditChapter = 7">
+          Cap. 7 Recursos
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 8"
+          (click)="selectedAuditChapter = 8">
+          Cap. 8 Operación
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 9"
+          (click)="selectedAuditChapter = 9">
+          Cap. 9 Evaluación
+        </button>
+        <button 
+          class="chapter-pill" 
+          [class.active]="selectedAuditChapter === 10"
+          (click)="selectedAuditChapter = 10">
+          Cap. 10 Mejora
+        </button>
+      </div>
+
+      <!-- Search & Status Filter -->
+      <div class="dataroom-sub-filters">
+        <div class="audit-search-box">
+          <span class="search-icon">🔎</span>
+          <input 
+            type="text" 
+            [(ngModel)]="auditSearchTerm" 
+            placeholder="Buscar por código, título, cláusula o responsable..." 
+            class="search-input">
+        </div>
+
+        <select [(ngModel)]="selectedAuditStatus" class="filter-select">
+          <option value="all">Todos los Estados</option>
+          <option value="approved">🟢 Aprobado / Vigente</option>
+          <option value="review">🟡 En Revisión</option>
+          <option value="expired">🔴 Requiere Actualización</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Evidences Grid -->
+    <div class="evidences-grid">
+      <div *ngIf="filteredEvidences.length === 0" class="empty-column-placeholder glass-panel text-center">
+        <p>No se encontraron evidencias con los filtros seleccionados.</p>
+      </div>
+
+      <div *ngFor="let ev of filteredEvidences" class="evidence-card glass-panel animate-fade-in">
+        <div class="ev-card-header">
+          <div class="ev-code-badge">
+            <span class="code-txt">{{ ev.id }}</span>
+            <span class="badge badge-cyan">Cláusula {{ ev.clause }}</span>
+          </div>
+          <span class="badge" [ngClass]="{
+            'badge-emerald': ev.status === 'approved',
+            'badge-amber': ev.status === 'review',
+            'badge-rose': ev.status === 'expired'
+          }">
+            {{ ev.status === 'approved' ? '🟢 Vigente' : (ev.status === 'review' ? '🟡 En Revisión' : '🔴 Vencido') }}
+          </span>
+        </div>
+
+        <h4 class="ev-card-title">{{ ev.title }}</h4>
+        <p class="ev-card-summary">{{ ev.summary }}</p>
+
+        <div class="ev-meta-box">
+          <div class="ev-meta-item">
+            <span class="meta-lbl">Responsable:</span>
+            <span class="meta-val">{{ ev.owner }}</span>
+          </div>
+          <div class="ev-meta-item">
+            <span class="meta-lbl">Última Revisión:</span>
+            <span class="meta-val">{{ ev.lastUpdated }}</span>
+          </div>
+          <div class="ev-meta-item">
+            <span class="meta-lbl">Formato:</span>
+            <span class="meta-val font-mono">📄 {{ ev.fileType }}</span>
+          </div>
+        </div>
+
+        <div class="ev-card-footer">
+          <button (click)="openEvidenceModal(ev)" class="btn btn-secondary btn-sm btn-block">
+            <span>👁️ Inspeccionar Evidencia (1-Clic)</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -727,7 +900,7 @@
 <!-- ==========================================================================
      SECTION 4: KITS DE ADOPCIÓN PLUG & PLAY (TEMPLATES)
      ========================================================================== -->
-<section id="templates" class="section-padding">
+<section id="templates" class="section-padding bg-darker">
   <div class="container">
     <div class="section-header text-center">
       <span class="badge badge-cyan">Módulo D • Recursos Operativos</span>
@@ -792,6 +965,63 @@
     </div>
   </div>
 </section>
+
+<!-- ==========================================================================
+     MODAL: INSPECCIÓN DE EVIDENCIA DATA ROOM (1-CLIC)
+     ========================================================================== -->
+<div *ngIf="activeEvidenceModal" class="modal-backdrop" (click)="closeEvidenceModal()">
+  <div class="modal-dialog glass-panel" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <div class="ev-code-badge">
+          <span class="code-txt">{{ activeEvidenceModal.id }}</span>
+          <span class="badge badge-cyan">Cláusula {{ activeEvidenceModal.clause }}</span>
+          <span class="badge badge-emerald">🔒 SHA-256 Verificado</span>
+        </div>
+        <h3 class="modal-title">{{ activeEvidenceModal.title }}</h3>
+      </div>
+      <button class="modal-close" (click)="closeEvidenceModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="modal-ev-meta-grid">
+        <div class="meta-card glass-panel">
+          <span class="meta-lbl">Capítulo Normativo:</span>
+          <span class="meta-val">Cap. {{ activeEvidenceModal.chapter }} - {{ activeEvidenceModal.chapterTitle }}</span>
+        </div>
+        <div class="meta-card glass-panel">
+          <span class="meta-lbl">Responsable / Custodio:</span>
+          <span class="meta-val">{{ activeEvidenceModal.owner }}</span>
+        </div>
+        <div class="meta-card glass-panel">
+          <span class="meta-lbl">Última Revisión:</span>
+          <span class="meta-val text-cyan">{{ activeEvidenceModal.lastUpdated }}</span>
+        </div>
+        <div class="meta-card glass-panel">
+          <span class="meta-lbl">Integridad Criptográfica:</span>
+          <span class="meta-val font-mono text-emerald">{{ activeEvidenceModal.hash }}</span>
+        </div>
+      </div>
+
+      <div class="modal-ev-snippet-box">
+        <span class="snippet-tag">📜 Extracto Oficial de la Evidencia:</span>
+        <blockquote class="snippet-content">
+          "{{ activeEvidenceModal.contentSnippet }}"
+        </blockquote>
+      </div>
+
+      <div class="modal-auditor-note-box">
+        <strong>🔍 Guía para el Auditor ISO 19011:</strong>
+        <p>{{ activeEvidenceModal.auditorCheckNote }}</p>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeEvidenceModal()">Cerrar</button>
+      <button class="btn btn-primary" (click)="closeEvidenceModal()">📥 Descargar Evidencia Certificada (.{{ activeEvidenceModal.fileType }})</button>
+    </div>
+  </div>
+</div>
 
 <!-- ==========================================================================
      MODAL: PREVISUALIZACIÓN DE PLANTILLA
