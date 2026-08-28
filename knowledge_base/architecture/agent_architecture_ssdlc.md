@@ -33,6 +33,10 @@ flowchart LR
 
 ## 🤖 Definición de Agentes por Fase
 
+### 0. 🧭 Agente Scrum Master & Agile Delivery Lead (Orquestador)
+- **Misión:** Facilitar las ceremonias Scrum (Planning, Daily, Review, Retrospective), velar por la Definición de Hecho (DoD), calcular la velocidad y coordinar a los demás agentes.
+- **Artefactos generados/actualizados:** `knowledge_base/architecture/agent_scrum_master.md` y `knowledge_base/functional/04_scrum_backlog_model.md`.
+
 ### 1. 🕵️ Agente Funcional & Gobernanza SGC
 - **Misión:** Traducir las necesidades de la norma ISO 9001 en historias de usuario, requerimientos funcionales y criterios "a prueba de fallos".
 - **Artefactos generados/actualizados:** `knowledge_base/functional/*.md`.

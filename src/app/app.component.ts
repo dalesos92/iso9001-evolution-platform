@@ -99,6 +99,80 @@ export class AppComponent {
   selectedKanbanPriority: string = 'all';
   showNewItemModal: boolean = false;
 
+  // Scrum Master Agent State
+  activeScrumTab: 'board' | 'standup' | 'dod' | 'goal' = 'board';
+  dailyExecutionMessage: string = '';
+
+  // Sprint Goal
+  currentSprintGoal: string = 'Entregar el MVP funcional de la plataforma ISO 9001 con comparador evolutivo, traducción en lenguaje simple, cálculo de brechas y gobierno de Backlog Scrum.';
+
+  // Definition of Done (DoD) Checklist
+  dodChecklist: { id: string; label: string; done: boolean; gate: string }[] = [
+    { id: 'dod-1', label: '100% Criterios de Aceptación Funcionales validados y operativos.', done: true, gate: 'Gate 1' },
+    { id: 'dod-2', label: 'Modelado de amenazas STRIDE y sanitización de inputs.', done: true, gate: 'Gate 2' },
+    { id: 'dod-3', label: 'Código limpio, tipado estricto y cero secretos en repo.', done: true, gate: 'Gate 3' },
+    { id: 'dod-4', label: 'Compilación ng build exitosa y pruebas de interfaz aprobadas.', done: true, gate: 'Gate 4' },
+    { id: 'dod-5', label: 'Registro de Checkpoint (CHK-XXX) en Base de Conocimiento y Push a GitHub.', done: true, gate: 'Gate 5' }
+  ];
+
+  // Daily Standup Report per Agent
+  agentStandups = [
+    {
+      agent: '🧭 Agente Scrum Master',
+      role: 'Facilitador Ágil & Delivery Lead',
+      status: '🟢 Activo - Sprint en Curso',
+      yesterday: 'Estructuración del Backlog de Producto y definición del DoD.',
+      today: 'Monitoreo del flujo Kanban y sincronización con Vercel.',
+      blockers: 'Ninguno. Velocidad del equipo: 31 pts entregados.',
+      emoji: '🧭'
+    },
+    {
+      agent: '🕵️ Agente Funcional / SGC',
+      role: 'Product Owner & Calidad ISO',
+      status: '🟢 Activo',
+      yesterday: 'Lista de deseos del mercado (WSH-01 a 06) y fichas Poka-Yoke.',
+      today: 'Especificación detallada de la Épica Copilot IA (WSH-01).',
+      blockers: 'Ninguno.',
+      emoji: '🕵️'
+    },
+    {
+      agent: '🛡️ Agente SecArch',
+      role: 'Seguridad & Modelado de Amenazas',
+      status: '🟢 Activo',
+      yesterday: 'Verificación de compuertas SSDLC Gates 1-3 y prevención de fuga de credenciales.',
+      today: 'Revisión de arquitectura para el Data Room seguro (WSH-03).',
+      blockers: 'Ninguno.',
+      emoji: '🛡️'
+    },
+    {
+      agent: '💻 Agente Dev Seguro',
+      role: 'Construcción Frontend & Backend',
+      status: '🟢 Activo',
+      yesterday: 'Implementación del Tablero Kanban y controles dinámicos en Angular.',
+      today: 'Optimización de bundle y componentes interactivos.',
+      blockers: 'Ninguno. Build pasando en 5s.',
+      emoji: '💻'
+    },
+    {
+      agent: '🔍 Agente QA & Audit',
+      role: 'Verificación & Auditoría ISO 19011',
+      status: '🟢 Activo',
+      yesterday: 'Validación de 4 vistas por cláusula y fórmulas de Gap Analysis.',
+      today: 'Pruebas de estrés y límites en transición de tarjetas Kanban.',
+      blockers: 'Ninguno.',
+      emoji: '🔍'
+    },
+    {
+      agent: '🚀 Agente DevSecOps',
+      role: 'Release & Base de Conocimiento',
+      status: '🟢 Activo',
+      yesterday: 'Despliegue automatizado en GitHub / Vercel.',
+      today: 'Sincronización continua de checkpoints en archivos .md.',
+      blockers: 'Ninguno.',
+      emoji: '🚀'
+    }
+  ];
+
   // New Item Form Data
   newItem: Partial<KanbanItem> = {
     title: '',
@@ -662,6 +736,15 @@ export class AppComponent {
 
     this.kanbanItems.push(itemToAdd);
     this.closeNewItemModal();
+  }
+
+  // Scrum Master Action: Execute Daily Standup Simulation
+  executeDaily() {
+    this.dailyExecutionMessage = `⚡ Daily Standup completado a las ${new Date().toLocaleTimeString()} - Todos los agentes sincronizados. Velocidad actual: ${this.completedStoryPoints}/${this.totalStoryPoints} pts (${this.sprintProgressPercent}%). Cero bloqueos detectados.`;
+  }
+
+  toggleDodItem(item: { id: string; label: string; done: boolean; gate: string }) {
+    item.done = !item.done;
   }
 
   // Scroll smoothly to section

@@ -240,6 +240,281 @@
   position: relative;
 }
 
+/* Scrum Cockpit Tabs */
+.scrum-cockpit-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1.5rem;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 12px;
+}
+
+.scrum-tab-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.scrum-tab-btn:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.scrum-tab-btn.active {
+  background: var(--bg-tertiary);
+  color: var(--accent-emerald);
+  border-color: var(--border-focus);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Daily Standup View */
+.standup-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.standup-title {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.standup-sub {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.daily-msg-banner {
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  font-size: 0.95rem;
+  color: var(--accent-emerald);
+  border-radius: 10px;
+}
+
+.agent-standups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.standup-agent-card {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.agent-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.agent-avatar {
+  font-size: 1.75rem;
+}
+
+.agent-name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.agent-role {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.agent-status {
+  margin-left: auto;
+  font-size: 0.7rem;
+}
+
+.standup-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.standup-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.standup-text {
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+/* Sprint Goal View */
+.goal-card {
+  padding: 3rem 2rem;
+  max-width: 850px;
+  margin: 0 auto;
+}
+
+.goal-statement {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 1.25rem 0;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.goal-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.goal-metrics-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.metric-box {
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.metric-val {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.metric-lbl {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+/* Definition of Done (DoD) View */
+.dod-card {
+  padding: 2.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.dod-header {
+  margin-bottom: 1.75rem;
+}
+
+.dod-title {
+  font-size: 1.6rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.dod-sub {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.dod-checklist-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+
+.dod-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dod-item:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.dod-item.checked {
+  background: rgba(16, 185, 129, 0.06);
+  border-color: var(--accent-emerald);
+}
+
+.dod-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 2px solid var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: var(--accent-emerald);
+  transition: all var(--transition-fast);
+}
+
+.dod-item.checked .dod-checkbox {
+  border-color: var(--accent-emerald);
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.dod-item-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dod-label {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.dod-gate {
+  font-size: 0.75rem;
+}
+
+.dod-footer-note {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
 .sprint-header-card {
   padding: 1.5rem 2rem;
   margin-bottom: 1.5rem;

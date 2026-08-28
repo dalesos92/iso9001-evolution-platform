@@ -113,8 +113,36 @@
       </p>
     </div>
 
+    <!-- Scrum Master Orchestration Cockpit Tabs -->
+    <div class="scrum-cockpit-tabs glass-panel">
+      <button 
+        class="scrum-tab-btn" 
+        [class.active]="activeScrumTab === 'board'"
+        (click)="activeScrumTab = 'board'">
+        <span>📌 Tablero Kanban E2E</span>
+      </button>
+      <button 
+        class="scrum-tab-btn" 
+        [class.active]="activeScrumTab === 'standup'"
+        (click)="activeScrumTab = 'standup'">
+        <span>🧭 Daily Standup de Agentes</span>
+      </button>
+      <button 
+        class="scrum-tab-btn" 
+        [class.active]="activeScrumTab === 'goal'"
+        (click)="activeScrumTab = 'goal'">
+        <span>🎯 Sprint Goal Activo</span>
+      </button>
+      <button 
+        class="scrum-tab-btn" 
+        [class.active]="activeScrumTab === 'dod'"
+        (click)="activeScrumTab = 'dod'">
+        <span>✅ Definición de Hecho (DoD)</span>
+      </button>
+    </div>
+
     <!-- Metrics & Sprint Health Bar -->
-    <div class="sprint-header-card glass-panel">
+    <div class="sprint-header-card glass-panel" *ngIf="activeScrumTab === 'board'">
       <div class="sprint-stats-row">
         <div class="sprint-stat">
           <span class="stat-title">Puntos Totales de Historia:</span>
@@ -141,100 +169,204 @@
       </div>
     </div>
 
-    <!-- Filters Bar -->
-    <div class="kanban-filters glass-panel">
-      <div class="filter-group">
-        <label class="filter-label">Filtrar por Épica:</label>
-        <select [(ngModel)]="selectedKanbanEpic" class="filter-select">
-          <option value="all">Todas las Épicas</option>
-          <option value="Motor IA">🤖 Motor IA</option>
-          <option value="Auditoría & Evidencias">🔍 Auditoría & Evidencias</option>
-          <option value="Normativa & Diff">📜 Normativa & Diff</option>
-          <option value="Multi-Norma">🌐 Multi-Norma</option>
-          <option value="SSDLC">🛡️ SSDLC & Gobernanza</option>
-          <option value="Reportes">📊 Reportes</option>
-        </select>
+    <!-- ================= TAB 1: KANBAN BOARD ================= -->
+    <div *ngIf="activeScrumTab === 'board'">
+      <!-- Filters Bar -->
+      <div class="kanban-filters glass-panel">
+        <div class="filter-group">
+          <label class="filter-label">Filtrar por Épica:</label>
+          <select [(ngModel)]="selectedKanbanEpic" class="filter-select">
+            <option value="all">Todas las Épicas</option>
+            <option value="Motor IA">🤖 Motor IA</option>
+            <option value="Auditoría & Evidencias">🔍 Auditoría & Evidencias</option>
+            <option value="Normativa & Diff">📜 Normativa & Diff</option>
+            <option value="Multi-Norma">🌐 Multi-Norma</option>
+            <option value="SSDLC">🛡️ SSDLC & Gobernanza</option>
+            <option value="Reportes">📊 Reportes</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Filtrar por Prioridad:</label>
+          <select [(ngModel)]="selectedKanbanPriority" class="filter-select">
+            <option value="all">Todas las Prioridades</option>
+            <option value="P0">🔴 P0 - Crítica (Must Have)</option>
+            <option value="P1">🟡 P1 - Alta (Should Have)</option>
+            <option value="P2">🔵 P2 - Media (Could Have)</option>
+            <option value="P3">⚪ P3 - Deseo (Nice to Have)</option>
+          </select>
+        </div>
+
+        <div class="filter-summary">
+          Mostrando <strong class="text-emerald">{{ filteredKanbanItems.length }}</strong> de <strong>{{ kanbanItems.length }}</strong> requerimientos
+        </div>
       </div>
 
-      <div class="filter-group">
-        <label class="filter-label">Filtrar por Prioridad:</label>
-        <select [(ngModel)]="selectedKanbanPriority" class="filter-select">
-          <option value="all">Todas las Prioridades</option>
-          <option value="P0">🔴 P0 - Crítica (Must Have)</option>
-          <option value="P1">🟡 P1 - Alta (Should Have)</option>
-          <option value="P2">🔵 P2 - Media (Could Have)</option>
-          <option value="P3">⚪ P3 - Deseo (Nice to Have)</option>
-        </select>
-      </div>
+      <!-- The 5-Column Kanban Board -->
+      <div class="kanban-board-grid">
+        <div *ngFor="let col of kanbanColumns" class="kanban-column glass-panel">
+          <div class="column-header" [style.border-top-color]="col.color">
+            <div class="col-title-left">
+              <span class="col-emoji">{{ col.emoji }}</span>
+              <h4 class="col-title">{{ col.title }}</h4>
+            </div>
+            <div class="col-badge-count">
+              <span>{{ getItemsByColumn(col.id).length }}</span>
+              <span class="pts-sub">({{ getColumnPoints(col.id) }} pts)</span>
+            </div>
+          </div>
 
-      <div class="filter-summary">
-        Mostrando <strong class="text-emerald">{{ filteredKanbanItems.length }}</strong> de <strong>{{ kanbanItems.length }}</strong> requerimientos
+          <!-- Column Cards Dropzone -->
+          <div class="column-cards-container">
+            <div *ngIf="getItemsByColumn(col.id).length === 0" class="empty-column-placeholder">
+              <p>Sin requerimientos en esta fase</p>
+            </div>
+
+            <div *ngFor="let item of getItemsByColumn(col.id)" class="kanban-card glass-panel">
+              <div class="card-top-bar">
+                <span class="card-id">{{ item.id }}</span>
+                <span class="badge" [ngClass]="{
+                  'badge-rose': item.priority === 'P0',
+                  'badge-amber': item.priority === 'P1',
+                  'badge-cyan': item.priority === 'P2',
+                  'badge-emerald': item.priority === 'P3'
+                }">{{ item.priority }}</span>
+              </div>
+
+              <h5 class="card-title">{{ item.title }}</h5>
+              <p class="card-desc">{{ item.description }}</p>
+
+              <div class="card-meta-row">
+                <span class="card-epic-tag">🏷️ {{ item.epic }}</span>
+                <span class="card-points">{{ item.storyPoints }} pts</span>
+              </div>
+
+              <div class="card-gate-row">
+                <span class="gate-tag">{{ item.ssdlcGate }}</span>
+                <span class="agent-tag">{{ item.assigneeAgent }}</span>
+              </div>
+
+              <!-- Card Actions (Move forward / backward) -->
+              <div class="card-actions-bar">
+                <button 
+                  *ngIf="col.id !== 'backlog'" 
+                  (click)="moveKanbanItem(item.id, 'backward')" 
+                  class="btn-card-move"
+                  title="Mover a columna anterior">
+                  ◀
+                </button>
+                <span class="action-spacer"></span>
+                <button 
+                  *ngIf="col.id !== 'done'" 
+                  (click)="moveKanbanItem(item.id, 'forward')" 
+                  class="btn-card-move forward"
+                  title="Mover a siguiente fase SSDLC">
+                  Mover ▶
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- The 5-Column Kanban Board -->
-    <div class="kanban-board-grid">
-      <div *ngFor="let col of kanbanColumns" class="kanban-column glass-panel">
-        <div class="column-header" [style.border-top-color]="col.color">
-          <div class="col-title-left">
-            <span class="col-emoji">{{ col.emoji }}</span>
-            <h4 class="col-title">{{ col.title }}</h4>
+    <!-- ================= TAB 2: DAILY STANDUP DE AGENTES ================= -->
+    <div *ngIf="activeScrumTab === 'standup'" class="scrum-standup-view animate-fade-in">
+      <div class="standup-top-bar glass-panel">
+        <div>
+          <h4 class="standup-title">🧭 Sincronización Diaria de la Red de Agentes (Daily Standup)</h4>
+          <p class="standup-sub">Coordinado por el <strong>Agente Scrum Master</strong> bajo el marco SSDLC.</p>
+        </div>
+        <button (click)="executeDaily()" class="btn btn-primary btn-sm">
+          <span>⚡ Ejecutar Sincronización en Vivo</span>
+        </button>
+      </div>
+
+      <div *ngIf="dailyExecutionMessage" class="daily-msg-banner glass-panel">
+        <span class="pulse-dot"></span>
+        <span>{{ dailyExecutionMessage }}</span>
+      </div>
+
+      <div class="agent-standups-grid">
+        <div *ngFor="let s of agentStandups" class="standup-agent-card glass-panel">
+          <div class="agent-card-header">
+            <div class="agent-avatar">{{ s.emoji }}</div>
+            <div>
+              <h5 class="agent-name">{{ s.agent }}</h5>
+              <span class="agent-role">{{ s.role }}</span>
+            </div>
+            <span class="badge badge-emerald agent-status">{{ s.status }}</span>
           </div>
-          <div class="col-badge-count">
-            <span>{{ getItemsByColumn(col.id).length }}</span>
-            <span class="pts-sub">({{ getColumnPoints(col.id) }} pts)</span>
+
+          <div class="standup-section">
+            <span class="standup-label">⏪ Ayer completó:</span>
+            <p class="standup-text">{{ s.yesterday }}</p>
+          </div>
+
+          <div class="standup-section">
+            <span class="standup-label">⏩ Hoy está desarrollando:</span>
+            <p class="standup-text text-cyan">{{ s.today }}</p>
+          </div>
+
+          <div class="standup-section">
+            <span class="standup-label">🚧 Bloqueos / Riesgos:</span>
+            <p class="standup-text text-muted">{{ s.blockers }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 3: SPRINT GOAL ================= -->
+    <div *ngIf="activeScrumTab === 'goal'" class="scrum-goal-view animate-fade-in">
+      <div class="goal-card glass-panel text-center">
+        <span class="badge badge-emerald">Sprint 1 • En Curso</span>
+        <h3 class="goal-statement">"{{ currentSprintGoal }}"</h3>
+        <p class="goal-desc">
+          Este objetivo garantiza que cualquier empresa pueda realizar una comparación multi-versión (2008 vs 2015 vs 2026/Clima), autodiagnosticar su madurez y gestionar su plan de transición sin fricción técnica.
+        </p>
+
+        <div class="goal-metrics-row">
+          <div class="metric-box glass-panel">
+            <span class="metric-val text-emerald">{{ sprintProgressPercent }}%</span>
+            <span class="metric-lbl">Avance del Sprint Goal</span>
+          </div>
+          <div class="metric-box glass-panel">
+            <span class="metric-val text-cyan">{{ completedStoryPoints }} / {{ totalStoryPoints }}</span>
+            <span class="metric-lbl">Puntos Entregados</span>
+          </div>
+          <div class="metric-box glass-panel">
+            <span class="metric-val text-amber">0</span>
+            <span class="metric-lbl">Bloqueos Críticos</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 4: DEFINICIÓN DE HECHO (DoD) ================= -->
+    <div *ngIf="activeScrumTab === 'dod'" class="scrum-dod-view animate-fade-in">
+      <div class="dod-card glass-panel">
+        <div class="dod-header">
+          <span class="badge badge-cyan">Criterios de Calidad & Seguridad</span>
+          <h3 class="dod-title">Definición de Hecho (Definition of Done - DoD)</h3>
+          <p class="dod-sub">
+            Para que una historia o requerimiento pase a la columna <strong>COMPLETADO (DONE)</strong>, debe cumplir obligatoriamente los 5 criterios de control del Agente Scrum Master:
+          </p>
+        </div>
+
+        <div class="dod-checklist-items">
+          <div *ngFor="let item of dodChecklist" class="dod-item" [class.checked]="item.done" (click)="toggleDodItem(item)">
+            <div class="dod-checkbox">
+              <span *ngIf="item.done">✓</span>
+            </div>
+            <div class="dod-item-content">
+              <span class="dod-label">{{ item.label }}</span>
+              <span class="badge badge-emerald dod-gate">{{ item.gate }}</span>
+            </div>
           </div>
         </div>
 
-        <!-- Column Cards Dropzone -->
-        <div class="column-cards-container">
-          <div *ngIf="getItemsByColumn(col.id).length === 0" class="empty-column-placeholder">
-            <p>Sin requerimientos en esta fase</p>
-          </div>
-
-          <div *ngFor="let item of getItemsByColumn(col.id)" class="kanban-card glass-panel">
-            <div class="card-top-bar">
-              <span class="card-id">{{ item.id }}</span>
-              <span class="badge" [ngClass]="{
-                'badge-rose': item.priority === 'P0',
-                'badge-amber': item.priority === 'P1',
-                'badge-cyan': item.priority === 'P2',
-                'badge-emerald': item.priority === 'P3'
-              }">{{ item.priority }}</span>
-            </div>
-
-            <h5 class="card-title">{{ item.title }}</h5>
-            <p class="card-desc">{{ item.description }}</p>
-
-            <div class="card-meta-row">
-              <span class="card-epic-tag">🏷️ {{ item.epic }}</span>
-              <span class="card-points">{{ item.storyPoints }} pts</span>
-            </div>
-
-            <div class="card-gate-row">
-              <span class="gate-tag">{{ item.ssdlcGate }}</span>
-              <span class="agent-tag">{{ item.assigneeAgent }}</span>
-            </div>
-
-            <!-- Card Actions (Move forward / backward) -->
-            <div class="card-actions-bar">
-              <button 
-                *ngIf="col.id !== 'backlog'" 
-                (click)="moveKanbanItem(item.id, 'backward')" 
-                class="btn-card-move"
-                title="Mover a columna anterior">
-                ◀
-              </button>
-              <span class="action-spacer"></span>
-              <button 
-                *ngIf="col.id !== 'done'" 
-                (click)="moveKanbanItem(item.id, 'forward')" 
-                class="btn-card-move forward"
-                title="Mover a siguiente fase SSDLC">
-                Mover ▶
-              </button>
-            </div>
-          </div>
+        <div class="dod-footer-note">
+          <strong>🛡️ Regla de Gobernanza SSDLC:</strong> Ninguna tarjeta puede ser movida a "Done" de forma arbitraria sin verificación del Agente QA y actualización de la Base de Conocimiento.
         </div>
       </div>
     </div>
