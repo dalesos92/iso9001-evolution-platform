@@ -10,7 +10,9 @@ Bienvenido al repositorio central de conocimiento del proyecto. Esta base de con
 knowledge_base/
 ├── README.md                                  # [ESTE ARCHIVO] Mapa maestro y gobernanza
 ├── architecture/
-│   └── agent_architecture_ssdlc.md           # Definición del modelo de Agentes E2E y SSDLC
+│   ├── agent_architecture_ssdlc.md           # Definición del modelo de Agentes E2E y SSDLC
+│   ├── agent_scrum_master.md                 # Perfil, ceremonias y DoD del Agente Scrum Master
+│   └── git_branching_strategy.md             # Política de versionamiento Git y ramas feature
 ├── functional/
 │   ├── 00_functional_checkpoints.md          # Bitácora de Puntos de Control y Cambios Exitosos
 │   ├── 01_iso9001_domain_model.md            # Dominio normativo ISO 9001 y su evolución

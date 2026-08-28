@@ -12,6 +12,7 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
 | **CHK-002** | 2026-08-27 | *Frontend / MVP* | Implementación de Landing Page MVP en Angular (Standalone): Comparador Diff, Ficha Humana ELI5, Gap Analysis interactivo y Kits de Adopción. | ✅ **Aprobado & Compilado** | Agente Funcional & Dev |
 | **CHK-003** | 2026-08-27 | *Agile / Kanban* | Lista de Deseos del Mercado (WSH-01 a 06), Modelo de Gobierno Scrum y Tablero Kanban Interactivo en Angular con métricas de velocidad. | ✅ **Aprobado & Compilado** | Agente Funcional & Dev |
 | **CHK-004** | 2026-08-27 | *Scrum / Governance* | Adopción integral de Scrum mediante Agente Scrum Master: Protocolo de Ceremonias, Daily Standup de Agentes, Sprint Goal y Control Interactivo de DoD. | ✅ **Aprobado & Compilado** | Agente Scrum Master & Dev |
+| **CHK-005** | 2026-08-27 | *DevSecOps / GitFlow* | Política oficial de versionamiento Git: Aislamiento obligatorio en ramas `feature/<ID>-<nombre>`, control de cambios y merge a `main` condicionado a aprobación explícita. | ✅ **Aprobado & Establecido** | Agente DevSecOps & Scrum Master |
 
 ---
 
@@ -76,3 +77,15 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
 - **Validación Técnica y de Seguridad (SSDLC Gates 1-5):**
   - ✅ Compilación de producción exitosa (`ng build` - 72 kB transfer size).
   - ✅ Sincronización con GitHub y Vercel.
+
+---
+
+### 🔹 [CHK-005] Política de Versionamiento Git & Ramas Feature
+- **Solicitud de Origen:** Establecer buenas prácticas de versionamiento en Git con ramas `feature` aisladas por cada requerimiento y compuerta de merge a `main` bajo autorización explícita del usuario.
+- **Aspectos Funcionales y Operativos Establecidos:**
+  1. **Estrategia GitFlow / Feature Branching:** Documentada en `knowledge_base/architecture/git_branching_strategy.md`.
+  2. **Regla de Nomenclatura:** `feature/<ID>-<nombre-descriptivo>` (ej: `feature/WSH-01-copilot-ia`).
+  3. **Compuerta de Aprobación (Gate de Integración):** Todo desarrollo, pruebas (`ng build`) y actualización de KB se realizarán y publicarán en su rama `feature` respectiva. El merge a `main` queda condicionado exclusivamente a la confirmación explícita del usuario.
+- **Validación:**
+  - ✅ Incorporado a la Definición de Hecho (DoD) del Agente Scrum Master.
+  - ✅ Sincronizado en `main`.

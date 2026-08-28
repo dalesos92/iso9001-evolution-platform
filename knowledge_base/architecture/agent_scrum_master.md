@@ -40,7 +40,9 @@ Una historia o requerimiento sólo se considera **DONE (✅)** cuando el Agente 
 - [x] **Seguridad SSDLC:** Aprobación de las compuertas (*Gates 1 a 5*), sin vulnerabilidades en dependencias.
 - [x] **Compilación y Build:** `ng build` exitoso sin errores en TypeScript ni estilos.
 - [x] **Base de Conocimiento:** Registro del Checkpoint (`CHK-XXX`) en `00_functional_checkpoints.md`.
-- [x] **Despliegue Continuo:** Sincronizado en la rama `main` y desplegado en Vercel.
+- [x] **Aislamiento en Rama Feature:** Desarrollo en rama `feature/<ID>-<nombre>` sin tocar `main` directamente.
+- [x] **Aprobación del Usuario:** Integración a `main` únicamente con autorización explícita del usuario.
+- [x] **Despliegue Continuo:** Sincronizado en la rama `main` y desplegado en Vercel tras el merge autorizado.
 
 ---
 
