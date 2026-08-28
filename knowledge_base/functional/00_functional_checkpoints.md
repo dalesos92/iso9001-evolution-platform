@@ -10,6 +10,7 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CHK-001** | 2026-08-27 | *Gobernanza / Core* | Definición de Requerimientos Funcionales y Técnicos, Base de Conocimiento .md, y Arquitectura SSDLC Multi-Agente. | ✅ **Aprobado** | Agente Funcional / SGC Lead |
 | **CHK-002** | 2026-08-27 | *Frontend / MVP* | Implementación de Landing Page MVP en Angular (Standalone): Comparador Diff, Ficha Humana ELI5, Gap Analysis interactivo y Kits de Adopción. | ✅ **Aprobado & Compilado** | Agente Funcional & Dev |
+| **CHK-003** | 2026-08-27 | *Agile / Kanban* | Lista de Deseos del Mercado (WSH-01 a 06), Modelo de Gobierno Scrum y Tablero Kanban Interactivo en Angular con métricas de velocidad. | ✅ **Aprobado & Compilado** | Agente Funcional & Dev |
 
 ---
 
@@ -42,3 +43,20 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
   - ✅ Compilación exitosa con Angular Standalone (`ng build` - 64 kB transfer size).
   - ✅ Cero dependencias vulnerables (SCA Gate 3).
   - ✅ Estilos y accesibilidad responsive validados.
+
+---
+
+### 🔹 [CHK-003] Lista de Deseos del Mercado & Tablero Scrum - Kanban Interactivo
+- **Solicitud de Origen:** Generación de Lista de Deseos de mercado, almacenamiento en KB, e implementación de un Tablero Scrum / Kanban gráfico e interactivo para seguimiento del backlog y priorización progresiva.
+- **Aspectos Funcionales Entregados:**
+  1. **Lista de Deseos del Mercado (WSH-01 a 06):** Identificación de 6 épicas estratégicas (Copilot IA, Audit Simulator, Data Room, Multi-Norma 9001/27001/14001, Dashboards para Junta y Alertas Inteligentes).
+  2. **Modelo de Gobierno Scrum en KB:** Estructuración de columnas de flujo, cálculo de velocidad y priorización P0 a P3 (`04_scrum_backlog_model.md`).
+  3. **Tablero Kanban Interactivo en Angular:**
+     - 5 Columnas de flujo (*Backlog, Priorizado, En Desarrollo, QA, Completado*).
+     - Contador de Story Points por columna y barra de velocidad global (% Done).
+     - Filtro dinámico por Épica y por Prioridad.
+     - Acciones interactivas para mover tarjetas hacia adelante/atrás en el ciclo SSDLC.
+     - Modal funcional para crear y agregar nuevos requerimientos o deseos al backlog.
+- **Validación Técnica y de Seguridad (SSDLC Gates 1-5):**
+  - ✅ Compilación de producción sin errores (`ng build` - 69 kB transfer size).
+  - ✅ Sincronización automática con Base de Conocimiento `.md` y GitHub.

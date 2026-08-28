@@ -53,6 +53,21 @@ export interface TemplateItem {
   fields: string[];
 }
 
+export type KanbanColumnId = 'backlog' | 'prioritized' | 'in_progress' | 'qa' | 'done';
+
+export interface KanbanItem {
+  id: string;
+  title: string;
+  description: string;
+  columnId: KanbanColumnId;
+  epic: 'Motor IA' | 'Auditoría & Evidencias' | 'Normativa & Diff' | 'Multi-Norma' | 'SSDLC' | 'Reportes';
+  priority: 'P0' | 'P1' | 'P2' | 'P3';
+  storyPoints: number;
+  ssdlcGate: 'Gate 1' | 'Gate 2' | 'Gate 3' | 'Gate 4' | 'Gate 5';
+  assigneeAgent: string;
+  tag?: string;
+}
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -78,6 +93,135 @@ export class AppComponent {
 
   // Search Filter
   searchTerm: string = '';
+
+  // Kanban Filter States
+  selectedKanbanEpic: string = 'all';
+  selectedKanbanPriority: string = 'all';
+  showNewItemModal: boolean = false;
+
+  // New Item Form Data
+  newItem: Partial<KanbanItem> = {
+    title: '',
+    description: '',
+    columnId: 'backlog',
+    epic: 'Motor IA',
+    priority: 'P1',
+    storyPoints: 5,
+    ssdlcGate: 'Gate 1',
+    assigneeAgent: '🕵️ Agente Funcional'
+  };
+
+  // Kanban Columns Definition
+  kanbanColumns: { id: KanbanColumnId; title: string; emoji: string; color: string }[] = [
+    { id: 'backlog', title: 'Backlog & Deseos', emoji: '💡', color: 'var(--text-muted)' },
+    { id: 'prioritized', title: 'Priorizado (Sprint)', emoji: '🎯', color: 'var(--accent-cyan)' },
+    { id: 'in_progress', title: 'En Desarrollo (SSDLC)', emoji: '⚙️', color: 'var(--accent-amber)' },
+    { id: 'qa', title: 'QA & Verificación', emoji: '🧪', color: 'var(--accent-purple)' },
+    { id: 'done', title: 'Completado (Done)', emoji: '✅', color: 'var(--accent-emerald)' }
+  ];
+
+  // Kanban Items Backlog Data (including Wishlist & Current Architecture)
+  kanbanItems: KanbanItem[] = [
+    {
+      id: 'CHK-001',
+      title: 'Línea Base: Requerimientos, Dominio ISO y SSDLC Multi-Agente',
+      description: 'Definición de requerimientos técnicos, arquitectura de agentes y compuertas de seguridad en Base de Conocimiento .md.',
+      columnId: 'done',
+      epic: 'SSDLC',
+      priority: 'P0',
+      storyPoints: 8,
+      ssdlcGate: 'Gate 5',
+      assigneeAgent: '🕵️ Agente Funcional / SGC'
+    },
+    {
+      id: 'CHK-002',
+      title: 'Landing Page MVP con Comparador Diff y Ficha Humana',
+      description: 'Desarrollo en Angular de Landing Page, motor Split-View de cláusulas, ficha ELI5 de 4 pestañas y cálculo de Gap Analysis.',
+      columnId: 'done',
+      epic: 'Normativa & Diff',
+      priority: 'P0',
+      storyPoints: 13,
+      ssdlcGate: 'Gate 5',
+      assigneeAgent: '💻 Agente Dev Seguro'
+    },
+    {
+      id: 'REQ-003',
+      title: 'Tablero Scrum - Kanban Interactivo de Backlog y Deseos',
+      description: 'Tablero dinámico de gestión ágil con cálculo de velocidad, filtros por épica y control de flujo SSDLC.',
+      columnId: 'done',
+      epic: 'SSDLC',
+      priority: 'P0',
+      storyPoints: 5,
+      ssdlcGate: 'Gate 4',
+      assigneeAgent: '💻 Agente Dev & QA'
+    },
+    {
+      id: 'WSH-01',
+      title: 'Copilot IA: Redactor Asistido de Políticas y Matrices de Riesgo',
+      description: 'Asistente generativo RAG con contexto de ISO 9001 e ISO 31000 para autogenerar borradores conformes en < 2 minutos.',
+      columnId: 'prioritized',
+      epic: 'Motor IA',
+      priority: 'P1',
+      storyPoints: 8,
+      ssdlcGate: 'Gate 2',
+      assigneeAgent: '🛡️ SecArch / IA Lead'
+    },
+    {
+      id: 'WSH-02',
+      title: 'Audit Simulator: Simulador de Entrevistas de Auditoría con IA',
+      description: 'Bot que asume el rol de Auditor Líder ISO 19011 y realiza preguntas imprevistas por proceso para entrenar al personal.',
+      columnId: 'in_progress',
+      epic: 'Auditoría & Evidencias',
+      priority: 'P2',
+      storyPoints: 8,
+      ssdlcGate: 'Gate 3',
+      assigneeAgent: '💻 Agente Dev Seguro'
+    },
+    {
+      id: 'WSH-03',
+      title: 'Data Room Virtual de Auditoría Express (Acceso 1-Clic)',
+      description: 'Bóveda centralizada indexada por cláusula donde el auditor externo consulta evidencias con permisos temporales.',
+      columnId: 'prioritized',
+      epic: 'Auditoría & Evidencias',
+      priority: 'P1',
+      storyPoints: 5,
+      ssdlcGate: 'Gate 1',
+      assigneeAgent: '🕵️ Agente Funcional'
+    },
+    {
+      id: 'WSH-04',
+      title: 'Integrador Multi-Norma (ISO 9001 + ISO 27001 + ISO 14001)',
+      description: 'Mapeo unificado de la Estructura Armonizada (HS) para gestionar Calidad, Ciberseguridad y Medio Ambiente en una sola matriz.',
+      columnId: 'backlog',
+      epic: 'Multi-Norma',
+      priority: 'P2',
+      storyPoints: 13,
+      ssdlcGate: 'Gate 1',
+      assigneeAgent: '🕵️ Agente Funcional'
+    },
+    {
+      id: 'WSH-05',
+      title: 'Generador de Dashboards Ejecutivos para Junta Directiva (PDF/PPT)',
+      description: 'Generación automática de resúmenes de 1 página con KPIs de calidad, costo de no calidad y retorno de inversión.',
+      columnId: 'backlog',
+      epic: 'Reportes',
+      priority: 'P3',
+      storyPoints: 5,
+      ssdlcGate: 'Gate 1',
+      assigneeAgent: '🕵️ Agente Funcional'
+    },
+    {
+      id: 'WSH-06',
+      title: 'Notificaciones Inteligentes de Caducidad de Evidencias (Alertas)',
+      description: 'Sistema proactivo de alertas por correo y webhook cuando una matriz o evaluación de proveedores cumple 11 meses.',
+      columnId: 'backlog',
+      epic: 'Auditoría & Evidencias',
+      priority: 'P2',
+      storyPoints: 3,
+      ssdlcGate: 'Gate 1',
+      assigneeAgent: '💻 Dev & DevSecOps'
+    }
+  ];
 
   // Master Clauses Data
   clauses: ClauseData[] = [
@@ -425,6 +569,99 @@ export class AppComponent {
   // Close Template Modal
   closeTemplate() {
     this.activeTemplateModal = null;
+  }
+
+  // -------------------------------------------------------------
+  // KANBAN & SCRUM METHODS
+  // -------------------------------------------------------------
+
+  get filteredKanbanItems(): KanbanItem[] {
+    return this.kanbanItems.filter(item => {
+      const matchEpic = this.selectedKanbanEpic === 'all' || item.epic === this.selectedKanbanEpic;
+      const matchPriority = this.selectedKanbanPriority === 'all' || item.priority === this.selectedKanbanPriority;
+      return matchEpic && matchPriority;
+    });
+  }
+
+  getItemsByColumn(columnId: KanbanColumnId): KanbanItem[] {
+    return this.filteredKanbanItems.filter(item => item.columnId === columnId);
+  }
+
+  getColumnPoints(columnId: KanbanColumnId): number {
+    return this.getItemsByColumn(columnId).reduce((sum, item) => sum + item.storyPoints, 0);
+  }
+
+  get totalStoryPoints(): number {
+    return this.kanbanItems.reduce((sum, item) => sum + item.storyPoints, 0);
+  }
+
+  get completedStoryPoints(): number {
+    return this.kanbanItems
+      .filter(item => item.columnId === 'done')
+      .reduce((sum, item) => sum + item.storyPoints, 0);
+  }
+
+  get sprintProgressPercent(): number {
+    if (this.totalStoryPoints === 0) return 0;
+    return Math.round((this.completedStoryPoints / this.totalStoryPoints) * 100);
+  }
+
+  moveKanbanItem(itemId: string, direction: 'forward' | 'backward') {
+    const item = this.kanbanItems.find(i => i.id === itemId);
+    if (!item) return;
+
+    const columnOrder: KanbanColumnId[] = ['backlog', 'prioritized', 'in_progress', 'qa', 'done'];
+    const currentIndex = columnOrder.indexOf(item.columnId);
+
+    if (direction === 'forward' && currentIndex < columnOrder.length - 1) {
+      item.columnId = columnOrder[currentIndex + 1];
+      // Update SSDLC Gate based on column
+      if (item.columnId === 'in_progress') item.ssdlcGate = 'Gate 3';
+      else if (item.columnId === 'qa') item.ssdlcGate = 'Gate 4';
+      else if (item.columnId === 'done') item.ssdlcGate = 'Gate 5';
+    } else if (direction === 'backward' && currentIndex > 0) {
+      item.columnId = columnOrder[currentIndex - 1];
+      if (item.columnId === 'prioritized') item.ssdlcGate = 'Gate 2';
+      else if (item.columnId === 'backlog') item.ssdlcGate = 'Gate 1';
+    }
+  }
+
+  openNewItemModal() {
+    this.newItem = {
+      title: '',
+      description: '',
+      columnId: 'backlog',
+      epic: 'Motor IA',
+      priority: 'P1',
+      storyPoints: 5,
+      ssdlcGate: 'Gate 1',
+      assigneeAgent: '🕵️ Agente Funcional'
+    };
+    this.showNewItemModal = true;
+  }
+
+  closeNewItemModal() {
+    this.showNewItemModal = false;
+  }
+
+  saveNewKanbanItem() {
+    if (!this.newItem.title?.trim()) return;
+
+    const newId = `REQ-00${this.kanbanItems.length + 1}`;
+    const itemToAdd: KanbanItem = {
+      id: newId,
+      title: this.newItem.title,
+      description: this.newItem.description || 'Sin descripción detallada.',
+      columnId: this.newItem.columnId || 'backlog',
+      epic: this.newItem.epic || 'Motor IA',
+      priority: this.newItem.priority || 'P1',
+      storyPoints: Number(this.newItem.storyPoints) || 5,
+      ssdlcGate: this.newItem.ssdlcGate || 'Gate 1',
+      assigneeAgent: this.newItem.assigneeAgent || '🕵️ Agente Funcional'
+    };
+
+    this.kanbanItems.push(itemToAdd);
+    this.closeNewItemModal();
   }
 
   // Scroll smoothly to section

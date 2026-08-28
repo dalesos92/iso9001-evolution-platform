@@ -7,7 +7,7 @@
       <div class="brand-icon">🛡️</div>
       <div class="brand-text">
         <span class="brand-name">ISO 9001 <span class="text-emerald">EVOLUTION</span></span>
-        <span class="brand-sub">Metodología Poka-Yoke</span>
+        <span class="brand-sub">Metodología Poka-Yoke & SSDLC</span>
       </div>
     </div>
 
@@ -15,6 +15,7 @@
       <a (click)="scrollTo('comparador')" class="nav-link">Comparador Diff</a>
       <a (click)="scrollTo('traductor')" class="nav-link">Ficha Humana (ELI5)</a>
       <a (click)="scrollTo('gap-analysis')" class="nav-link">Gap Analysis</a>
+      <a (click)="scrollTo('kanban')" class="nav-link highlight-link">📌 Tablero Scrum</a>
       <a (click)="scrollTo('templates')" class="nav-link">Kits de Adopción</a>
       <a (click)="scrollTo('ssdlc')" class="nav-link">Gobernanza SSDLC</a>
     </nav>
@@ -23,8 +24,8 @@
       <a href="https://github.com/dalesos92/iso9001-evolution-platform" target="_blank" class="btn btn-secondary btn-sm">
         <span>🐙 GitHub</span>
       </a>
-      <button (click)="scrollTo('gap-analysis')" class="btn btn-primary btn-sm">
-        <span>⚡ Autodiagnóstico</span>
+      <button (click)="scrollTo('kanban')" class="btn btn-primary btn-sm">
+        <span>⚡ Ver Backlog Scrum</span>
       </button>
     </div>
   </div>
@@ -38,7 +39,7 @@
     <div class="hero-badge animate-fade-in">
       <span class="badge badge-emerald">
         <span class="pulse-dot"></span>
-        ISO 9001:2008 ➔ 2015 ➔ 2026 Ready | Enmiendas de Clima 2024
+        ISO 9001:2008 ➔ 2015 ➔ 2026 Ready | Enmiendas de Clima 2024 & Tablero Ágil
       </span>
     </div>
 
@@ -47,12 +48,15 @@
     </h1>
 
     <p class="hero-subtitle animate-fade-in">
-      Elimina la burocracia documental y las interpretaciones complejas. Compara cláusulas históricas, traduce requisitos normativos a lenguaje sencillo y obtén kits de adopción listos para auditoría.
+      Elimina la burocracia documental y las interpretaciones complejas. Compara cláusulas históricas, traduce requisitos normativos a lenguaje sencillo, gestiona tu backlog Scrum y obtén kits de adopción listos para auditoría.
     </p>
 
     <div class="hero-cta-group animate-fade-in">
       <button (click)="scrollTo('comparador')" class="btn btn-primary btn-lg">
         <span>🔄 Explorar Comparador de Cláusulas</span>
+      </button>
+      <button (click)="scrollTo('kanban')" class="btn btn-cyan btn-lg">
+        <span>📌 Ver Tablero Scrum & Deseos</span>
       </button>
       <button (click)="scrollTo('gap-analysis')" class="btn btn-secondary btn-lg">
         <span>📊 Calcular Brecha (Gap Analysis)</span>
@@ -78,10 +82,10 @@
       </div>
 
       <div class="glass-panel stat-card">
-        <div class="stat-icon">🔍</div>
+        <div class="stat-icon">📋</div>
         <div class="stat-info">
-          <div class="stat-number">4 Vistas</div>
-          <div class="stat-label">Por Cláusula (Oficial, Simple, Ejemplos, Evidencia)</div>
+          <div class="stat-number">{{ sprintProgressPercent }}%</div>
+          <div class="stat-label">Progreso del Backlog E2E</div>
         </div>
       </div>
 
@@ -97,9 +101,150 @@
 </section>
 
 <!-- ==========================================================================
+     SECTION: TABLERO SCRUM - KANBAN (NUEVO MÓDULO INTERACTIVO)
+     ========================================================================== -->
+<section id="kanban" class="section-padding kanban-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge badge-cyan">Módulo Ágil • Gestión E2E & Lista de Deseos</span>
+      <h2 class="section-title">Tablero Scrum - Kanban del Producto</h2>
+      <p class="section-desc">
+        Monitoreo en tiempo real del Backlog, Requerimientos Funcionales y Lista de Deseos del Mercado integrados con las compuertas de seguridad SSDLC.
+      </p>
+    </div>
+
+    <!-- Metrics & Sprint Health Bar -->
+    <div class="sprint-header-card glass-panel">
+      <div class="sprint-stats-row">
+        <div class="sprint-stat">
+          <span class="stat-title">Puntos Totales de Historia:</span>
+          <span class="stat-val text-cyan">{{ totalStoryPoints }} pts</span>
+        </div>
+        <div class="sprint-stat">
+          <span class="stat-title">Puntos Completados (Done):</span>
+          <span class="stat-val text-emerald">{{ completedStoryPoints }} pts</span>
+        </div>
+        <div class="sprint-stat">
+          <span class="stat-title">Velocidad / Avance Global:</span>
+          <span class="stat-val text-amber">{{ sprintProgressPercent }}%</span>
+        </div>
+        <div class="sprint-stat">
+          <button (click)="openNewItemModal()" class="btn btn-primary btn-sm">
+            <span>➕ Añadir Requerimiento / Deseo</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="sprint-progress-wrapper">
+        <div class="sprint-progress-bar" [style.width]="sprintProgressPercent + '%'"></div>
+      </div>
+    </div>
+
+    <!-- Filters Bar -->
+    <div class="kanban-filters glass-panel">
+      <div class="filter-group">
+        <label class="filter-label">Filtrar por Épica:</label>
+        <select [(ngModel)]="selectedKanbanEpic" class="filter-select">
+          <option value="all">Todas las Épicas</option>
+          <option value="Motor IA">🤖 Motor IA</option>
+          <option value="Auditoría & Evidencias">🔍 Auditoría & Evidencias</option>
+          <option value="Normativa & Diff">📜 Normativa & Diff</option>
+          <option value="Multi-Norma">🌐 Multi-Norma</option>
+          <option value="SSDLC">🛡️ SSDLC & Gobernanza</option>
+          <option value="Reportes">📊 Reportes</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label">Filtrar por Prioridad:</label>
+        <select [(ngModel)]="selectedKanbanPriority" class="filter-select">
+          <option value="all">Todas las Prioridades</option>
+          <option value="P0">🔴 P0 - Crítica (Must Have)</option>
+          <option value="P1">🟡 P1 - Alta (Should Have)</option>
+          <option value="P2">🔵 P2 - Media (Could Have)</option>
+          <option value="P3">⚪ P3 - Deseo (Nice to Have)</option>
+        </select>
+      </div>
+
+      <div class="filter-summary">
+        Mostrando <strong class="text-emerald">{{ filteredKanbanItems.length }}</strong> de <strong>{{ kanbanItems.length }}</strong> requerimientos
+      </div>
+    </div>
+
+    <!-- The 5-Column Kanban Board -->
+    <div class="kanban-board-grid">
+      <div *ngFor="let col of kanbanColumns" class="kanban-column glass-panel">
+        <div class="column-header" [style.border-top-color]="col.color">
+          <div class="col-title-left">
+            <span class="col-emoji">{{ col.emoji }}</span>
+            <h4 class="col-title">{{ col.title }}</h4>
+          </div>
+          <div class="col-badge-count">
+            <span>{{ getItemsByColumn(col.id).length }}</span>
+            <span class="pts-sub">({{ getColumnPoints(col.id) }} pts)</span>
+          </div>
+        </div>
+
+        <!-- Column Cards Dropzone -->
+        <div class="column-cards-container">
+          <div *ngIf="getItemsByColumn(col.id).length === 0" class="empty-column-placeholder">
+            <p>Sin requerimientos en esta fase</p>
+          </div>
+
+          <div *ngFor="let item of getItemsByColumn(col.id)" class="kanban-card glass-panel">
+            <div class="card-top-bar">
+              <span class="card-id">{{ item.id }}</span>
+              <span class="badge" [ngClass]="{
+                'badge-rose': item.priority === 'P0',
+                'badge-amber': item.priority === 'P1',
+                'badge-cyan': item.priority === 'P2',
+                'badge-emerald': item.priority === 'P3'
+              }">{{ item.priority }}</span>
+            </div>
+
+            <h5 class="card-title">{{ item.title }}</h5>
+            <p class="card-desc">{{ item.description }}</p>
+
+            <div class="card-meta-row">
+              <span class="card-epic-tag">🏷️ {{ item.epic }}</span>
+              <span class="card-points">{{ item.storyPoints }} pts</span>
+            </div>
+
+            <div class="card-gate-row">
+              <span class="gate-tag">{{ item.ssdlcGate }}</span>
+              <span class="agent-tag">{{ item.assigneeAgent }}</span>
+            </div>
+
+            <!-- Card Actions (Move forward / backward) -->
+            <div class="card-actions-bar">
+              <button 
+                *ngIf="col.id !== 'backlog'" 
+                (click)="moveKanbanItem(item.id, 'backward')" 
+                class="btn-card-move"
+                title="Mover a columna anterior">
+                ◀
+              </button>
+              <span class="action-spacer"></span>
+              <button 
+                *ngIf="col.id !== 'done'" 
+                (click)="moveKanbanItem(item.id, 'forward')" 
+                class="btn-card-move forward"
+                title="Mover a siguiente fase SSDLC">
+                Mover ▶
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
      SECTION 1: MOTOR DE COMPARACIÓN (DIFF ENGINE)
      ========================================================================== -->
-<section id="comparador" class="section-padding">
+<section id="comparador" class="section-padding bg-darker">
   <div class="container">
     <div class="section-header text-center">
       <span class="badge badge-cyan">Módulo A • Diff Engine</span>
@@ -250,7 +395,7 @@
 <!-- ==========================================================================
      SECTION 2: FICHA INTERACTIVA "A PRUEBA DE NIÑOS" (PLAIN LANGUAGE)
      ========================================================================== -->
-<section id="traductor" class="section-padding bg-darker">
+<section id="traductor" class="section-padding">
   <div class="container">
     <div class="section-header text-center">
       <span class="badge badge-emerald">Módulo B • Metodología Poka-Yoke</span>
@@ -365,7 +510,7 @@
 <!-- ==========================================================================
      SECTION 3: GAP ANALYSIS & DIAGNÓSTICO DE BRECHAS INTERACTIVO
      ========================================================================== -->
-<section id="gap-analysis" class="section-padding">
+<section id="gap-analysis" class="section-padding bg-darker">
   <div class="container">
     <div class="section-header text-center">
       <span class="badge badge-amber">Módulo C • Autodiagnóstico Express</span>
@@ -450,7 +595,7 @@
 <!-- ==========================================================================
      SECTION 4: KITS DE ADOPCIÓN PLUG & PLAY (TEMPLATES)
      ========================================================================== -->
-<section id="templates" class="section-padding bg-darker">
+<section id="templates" class="section-padding">
   <div class="container">
     <div class="section-header text-center">
       <span class="badge badge-cyan">Módulo D • Recursos Operativos</span>
@@ -484,14 +629,14 @@
 <!-- ==========================================================================
      SECTION 5: GOBERNANZA SSDLC Y BASE DE CONOCIMIENTO
      ========================================================================== -->
-<section id="ssdlc" class="section-padding">
+<section id="ssdlc" class="section-padding bg-darker">
   <div class="container">
     <div class="ssdlc-banner glass-panel">
       <div class="ssdlc-content">
         <span class="badge badge-emerald">Gobernanza & Trazabilidad SSDLC</span>
         <h3 class="ssdlc-title">Base de Conocimiento y Desarrollo Basado en Agentes</h3>
         <p class="ssdlc-text">
-          Cada solicitud de cambio completada se documenta automáticamente en archivos Markdown modulares con puntos de control (<span class="code-pill">CHK-001</span>) y compuertas de seguridad (<span class="code-pill">Gate 1 a Gate 5</span>).
+          Cada solicitud de cambio completada se documenta automáticamente en archivos Markdown modulares con puntos de control (<span class="code-pill">CHK-001</span>, <span class="code-pill">CHK-002</span>, <span class="code-pill">CHK-003</span>) y compuertas de seguridad (<span class="code-pill">Gate 1 a Gate 5</span>).
         </p>
 
         <div class="ssdlc-agents-flow">
@@ -555,17 +700,90 @@
 </div>
 
 <!-- ==========================================================================
+     MODAL: AÑADIR NUEVO REQUERIMIENTO / DESEO A KANBAN
+     ========================================================================== -->
+<div *ngIf="showNewItemModal" class="modal-backdrop" (click)="closeNewItemModal()">
+  <div class="modal-dialog glass-panel" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <span class="badge badge-cyan">Nuevo Elemento</span>
+        <h3 class="modal-title">Añadir Requerimiento o Deseo</h3>
+      </div>
+      <button class="modal-close" (click)="closeNewItemModal()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Título de la Historia / Deseo:</label>
+        <input type="text" [(ngModel)]="newItem.title" placeholder="Ej: Integración con Slack para alertas..." class="form-input">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Descripción / Criterio de Aceptación:</label>
+        <textarea [(ngModel)]="newItem.description" rows="3" placeholder="Qué problema resuelve y qué entregable se espera..." class="form-textarea"></textarea>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Épica / Categoría:</label>
+          <select [(ngModel)]="newItem.epic" class="form-select">
+            <option value="Motor IA">🤖 Motor IA</option>
+            <option value="Auditoría & Evidencias">🔍 Auditoría & Evidencias</option>
+            <option value="Normativa & Diff">📜 Normativa & Diff</option>
+            <option value="Multi-Norma">🌐 Multi-Norma</option>
+            <option value="SSDLC">🛡️ SSDLC</option>
+            <option value="Reportes">📊 Reportes</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Prioridad:</label>
+          <select [(ngModel)]="newItem.priority" class="form-select">
+            <option value="P0">🔴 P0 - Crítica</option>
+            <option value="P1">🟡 P1 - Alta</option>
+            <option value="P2">🔵 P2 - Media</option>
+            <option value="P3">⚪ P3 - Deseo</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row-2">
+        <div class="form-group">
+          <label class="form-label">Puntos de Historia:</label>
+          <input type="number" [(ngModel)]="newItem.storyPoints" min="1" max="21" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Columna Inicial:</label>
+          <select [(ngModel)]="newItem.columnId" class="form-select">
+            <option value="backlog">💡 Backlog & Deseos</option>
+            <option value="prioritized">🎯 Priorizado (Sprint)</option>
+            <option value="in_progress">⚙️ En Desarrollo (SSDLC)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeNewItemModal()">Cancelar</button>
+      <button class="btn btn-primary" (click)="saveNewKanbanItem()">💾 Guardar en Tablero</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
      FOOTER
      ========================================================================== -->
 <footer class="footer">
   <div class="container footer-content">
     <div class="footer-left">
       <div class="footer-brand">🛡️ ISO 9001 Evolution Platform</div>
-      <p class="footer-sub">Plataforma de comparación y adopción en lenguaje simple y a prueba de fallos.</p>
+      <p class="footer-sub">Plataforma de comparación, adopción ágil y gobernanza SSDLC a prueba de fallos.</p>
     </div>
 
     <div class="footer-links">
       <a href="https://github.com/dalesos92/iso9001-evolution-platform" target="_blank">Repositorio GitHub</a>
+      <a (click)="scrollTo('kanban')">Tablero Scrum</a>
       <a (click)="scrollTo('comparador')">Comparador</a>
       <a (click)="scrollTo('gap-analysis')">Gap Analysis</a>
       <a (click)="scrollTo('ssdlc')">Gobernanza SSDLC</a>

@@ -14,7 +14,9 @@ knowledge_base/
 ├── functional/
 │   ├── 00_functional_checkpoints.md          # Bitácora de Puntos de Control y Cambios Exitosos
 │   ├── 01_iso9001_domain_model.md            # Dominio normativo ISO 9001 y su evolución
-│   └── 02_plain_language_engine.md           # Criterios del motor de simplificación (Poka-Yoke)
+│   ├── 02_plain_language_engine.md           # Criterios del motor de simplificación (Poka-Yoke)
+│   ├── 03_market_wishlist_and_trends.md      # Lista de Deseos del Mercado y Tendencias ISO
+│   └── 04_scrum_backlog_model.md             # Modelo de Backlog Scrum y Flujo Kanban SSDLC
 └── security_ssdlc/
     └── 00_security_gates_and_checkpoints.md  # Puertas de enlace de seguridad por fase E2E
 ```
