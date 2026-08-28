@@ -1,0 +1,578 @@
+<!-- ==========================================================================
+     NAVBAR
+     ========================================================================== -->
+<header class="navbar">
+  <div class="container nav-content">
+    <div class="nav-brand" (click)="scrollTo('hero')">
+      <div class="brand-icon">🛡️</div>
+      <div class="brand-text">
+        <span class="brand-name">ISO 9001 <span class="text-emerald">EVOLUTION</span></span>
+        <span class="brand-sub">Metodología Poka-Yoke</span>
+      </div>
+    </div>
+
+    <nav class="nav-links">
+      <a (click)="scrollTo('comparador')" class="nav-link">Comparador Diff</a>
+      <a (click)="scrollTo('traductor')" class="nav-link">Ficha Humana (ELI5)</a>
+      <a (click)="scrollTo('gap-analysis')" class="nav-link">Gap Analysis</a>
+      <a (click)="scrollTo('templates')" class="nav-link">Kits de Adopción</a>
+      <a (click)="scrollTo('ssdlc')" class="nav-link">Gobernanza SSDLC</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="https://github.com/dalesos92/iso9001-evolution-platform" target="_blank" class="btn btn-secondary btn-sm">
+        <span>🐙 GitHub</span>
+      </a>
+      <button (click)="scrollTo('gap-analysis')" class="btn btn-primary btn-sm">
+        <span>⚡ Autodiagnóstico</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ==========================================================================
+     HERO SECTION
+     ========================================================================== -->
+<section id="hero" class="hero-section">
+  <div class="container hero-container">
+    <div class="hero-badge animate-fade-in">
+      <span class="badge badge-emerald">
+        <span class="pulse-dot"></span>
+        ISO 9001:2008 ➔ 2015 ➔ 2026 Ready | Enmiendas de Clima 2024
+      </span>
+    </div>
+
+    <h1 class="hero-title animate-fade-in">
+      Audita, Compara y Transiciona tu ISO 9001 en <span class="gradient-text">Lenguaje Humano</span> y a Prueba de Fallos
+    </h1>
+
+    <p class="hero-subtitle animate-fade-in">
+      Elimina la burocracia documental y las interpretaciones complejas. Compara cláusulas históricas, traduce requisitos normativos a lenguaje sencillo y obtén kits de adopción listos para auditoría.
+    </p>
+
+    <div class="hero-cta-group animate-fade-in">
+      <button (click)="scrollTo('comparador')" class="btn btn-primary btn-lg">
+        <span>🔄 Explorar Comparador de Cláusulas</span>
+      </button>
+      <button (click)="scrollTo('gap-analysis')" class="btn btn-secondary btn-lg">
+        <span>📊 Calcular Brecha (Gap Analysis)</span>
+      </button>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="stats-grid">
+      <div class="glass-panel stat-card">
+        <div class="stat-icon">🗺️</div>
+        <div class="stat-info">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Cobertura Anexo SL / HLS</div>
+        </div>
+      </div>
+
+      <div class="glass-panel stat-card">
+        <div class="stat-icon">⚡</div>
+        <div class="stat-info">
+          <div class="stat-number">-70%</div>
+          <div class="stat-label">Tiempo en Documentación</div>
+        </div>
+      </div>
+
+      <div class="glass-panel stat-card">
+        <div class="stat-icon">🔍</div>
+        <div class="stat-info">
+          <div class="stat-number">4 Vistas</div>
+          <div class="stat-label">Por Cláusula (Oficial, Simple, Ejemplos, Evidencia)</div>
+        </div>
+      </div>
+
+      <div class="glass-panel stat-card">
+        <div class="stat-icon">🌱</div>
+        <div class="stat-info">
+          <div class="stat-number">2024+</div>
+          <div class="stat-label">Enmienda Acción Climática Integrada</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     SECTION 1: MOTOR DE COMPARACIÓN (DIFF ENGINE)
+     ========================================================================== -->
+<section id="comparador" class="section-padding">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge badge-cyan">Módulo A • Diff Engine</span>
+      <h2 class="section-title">Motor de Comparación Evolutiva de la Norma</h2>
+      <p class="section-desc">
+        Identifica en segundos qué requisitos se mantuvieron, cuáles cambiaron de ubicación y qué nuevas obligaciones se agregaron.
+      </p>
+    </div>
+
+    <!-- Mode Selector & Filter -->
+    <div class="comparator-controls glass-panel">
+      <div class="version-toggle-group">
+        <button 
+          class="version-btn" 
+          [class.active]="comparisonMode === '2015_vs_2026'"
+          (click)="comparisonMode = '2015_vs_2026'">
+          <span>🌿 ISO 9001:2015 ➔ 2026 / Enmiendas 2024</span>
+        </button>
+        <button 
+          class="version-btn" 
+          [class.active]="comparisonMode === '2008_vs_2015'"
+          (click)="comparisonMode = '2008_vs_2015'">
+          <span>📜 ISO 9001:2008 ➔ ISO 9001:2015</span>
+        </button>
+      </div>
+
+      <div class="clause-search-box">
+        <span class="search-icon">🔎</span>
+        <input 
+          type="text" 
+          placeholder="Filtrar cláusula por número o palabra..." 
+          [(ngModel)]="searchTerm" 
+          class="search-input">
+      </div>
+    </div>
+
+    <!-- Main Comparator Layout -->
+    <div class="comparator-layout">
+      <!-- Clause Navigation List -->
+      <div class="clause-nav-list glass-panel">
+        <h4 class="nav-list-title">Cláusulas Clave</h4>
+        <div class="clause-items">
+          <div 
+            *ngFor="let item of filteredClauses"
+            class="clause-nav-item"
+            [class.active]="selectedClauseId === item.id"
+            (click)="selectClause(item.id)">
+            <div class="item-header">
+              <span class="clause-badge">{{ item.number }}</span>
+              <span class="badge" [ngClass]="{
+                'badge-emerald': item.impact === 'Alto',
+                'badge-cyan': item.impact === 'Medio',
+                'badge-amber': item.impact === 'Bajo'
+              }">Impacto {{ item.impact }}</span>
+            </div>
+            <div class="item-title">{{ item.title }}</div>
+            <div class="item-meta">
+              <span class="pdca-tag">{{ item.pdca }}</span>
+              <span class="diff-tag" [ngClass]="item.diffType">
+                {{ item.diffType === 'new' ? '🟩 Nuevo' : (item.diffType === 'modified' ? '🟨 Modificado' : '🔄 Reubicado') }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Comparison Split View -->
+      <div class="comparator-detail glass-panel">
+        <div class="detail-header">
+          <div>
+            <span class="badge badge-emerald">Cláusula {{ selectedClause.number }}</span>
+            <h3 class="detail-title">{{ selectedClause.title }}</h3>
+          </div>
+          <div class="detail-tags">
+            <span class="badge badge-cyan">Ciclo PHVA: {{ selectedClause.pdca }}</span>
+            <span class="badge badge-amber">Nivel de Impacto: {{ selectedClause.impact }}</span>
+          </div>
+        </div>
+
+        <!-- Split Grid -->
+        <div class="diff-split-grid" *ngIf="comparisonMode === '2015_vs_2026'">
+          <!-- Left Column (2015) -->
+          <div class="diff-column col-origin">
+            <div class="col-header">
+              <span class="col-version">ISO 9001:2015</span>
+              <span class="col-status-pill">{{ selectedClause.v2015.status }}</span>
+            </div>
+            <h5 class="col-clause-name">{{ selectedClause.v2015.clause }}</h5>
+            <p class="col-summary">{{ selectedClause.v2015.summary }}</p>
+          </div>
+
+          <!-- Diff Arrow -->
+          <div class="diff-divider">
+            <div class="divider-icon">➔</div>
+          </div>
+
+          <!-- Right Column (2026 / Enmiendas) -->
+          <div class="diff-column col-target">
+            <div class="col-header">
+              <span class="col-version text-emerald">ISO 9001:2026 + Clima</span>
+              <span class="badge badge-emerald">{{ selectedClause.v2026.status }}</span>
+            </div>
+            <h5 class="col-clause-name">{{ selectedClause.v2026.clause }}</h5>
+            <p class="col-summary">{{ selectedClause.v2026.summary }}</p>
+          </div>
+        </div>
+
+        <div class="diff-split-grid" *ngIf="comparisonMode === '2008_vs_2015'">
+          <!-- Left Column (2008) -->
+          <div class="diff-column col-origin">
+            <div class="col-header">
+              <span class="col-version">ISO 9001:2008</span>
+              <span class="col-status-pill">{{ selectedClause.v2008.status }}</span>
+            </div>
+            <h5 class="col-clause-name">{{ selectedClause.v2008.clause }}</h5>
+            <p class="col-summary">{{ selectedClause.v2008.summary }}</p>
+          </div>
+
+          <!-- Diff Arrow -->
+          <div class="diff-divider">
+            <div class="divider-icon">➔</div>
+          </div>
+
+          <!-- Right Column (2015) -->
+          <div class="diff-column col-target">
+            <div class="col-header">
+              <span class="col-version text-cyan">ISO 9001:2015</span>
+              <span class="badge badge-cyan">{{ selectedClause.v2015.status }}</span>
+            </div>
+            <h5 class="col-clause-name">{{ selectedClause.v2015.clause }}</h5>
+            <p class="col-summary">{{ selectedClause.v2015.summary }}</p>
+          </div>
+        </div>
+
+        <!-- Poka Yoke Quick Tip -->
+        <div class="poka-yoke-banner">
+          <div class="poka-icon">💡</div>
+          <div class="poka-text">
+            <strong>Regla Poka-Yoke para la Empresa:</strong>
+            <p>{{ selectedClause.pokaYokeTip }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     SECTION 2: FICHA INTERACTIVA "A PRUEBA DE NIÑOS" (PLAIN LANGUAGE)
+     ========================================================================== -->
+<section id="traductor" class="section-padding bg-darker">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge badge-emerald">Módulo B • Metodología Poka-Yoke</span>
+      <h2 class="section-title">Ficha "Traducción Humana" del Requisito</h2>
+      <p class="section-desc">
+        Cero jerga burocrática. Cada requisito se desglosa en 4 perspectivas prácticas para que cualquier integrante de la empresa lo comprenda y aplique de inmediato.
+      </p>
+    </div>
+
+    <!-- The 4-Tab Card -->
+    <div class="human-card glass-panel">
+      <!-- Card Tabs -->
+      <div class="card-tabs">
+        <button 
+          class="card-tab" 
+          [class.active]="activePlainTab === 'plain'"
+          (click)="activePlainTab = 'plain'">
+          <span class="tab-emoji">💡</span>
+          <span>1. ¿Qué significa en Español Simple?</span>
+        </button>
+        <button 
+          class="card-tab" 
+          [class.active]="activePlainTab === 'examples'"
+          (click)="activePlainTab = 'examples'">
+          <span class="tab-emoji">🏢</span>
+          <span>2. Ejemplos en la Vida Real</span>
+        </button>
+        <button 
+          class="card-tab" 
+          [class.active]="activePlainTab === 'audit'"
+          (click)="activePlainTab = 'audit'">
+          <span class="tab-emoji">📋</span>
+          <span>3. ¿Qué te pedirá el Auditor?</span>
+        </button>
+        <button 
+          class="card-tab" 
+          [class.active]="activePlainTab === 'official'"
+          (click)="activePlainTab = 'official'">
+          <span class="tab-emoji">📜</span>
+          <span>4. Texto Oficial de la Norma</span>
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="tab-content-body">
+        <!-- Clause Title Bar -->
+        <div class="tab-clause-title">
+          <span class="badge badge-cyan">Cláusula {{ selectedClause.number }}</span>
+          <h3>{{ selectedClause.title }}</h3>
+        </div>
+
+        <!-- TAB 1: PLAIN SPANISH (ELI5) -->
+        <div *ngIf="activePlainTab === 'plain'" class="tab-pane animate-fade-in">
+          <div class="plain-hero-box">
+            <div class="plain-quote-icon">🗣️</div>
+            <div class="plain-quote-text">
+              <p class="lead-text">{{ selectedClause.plainSpanish }}</p>
+            </div>
+          </div>
+          <div class="why-it-matters">
+            <h4>🎯 ¿Por qué es vital para tu negocio?</h4>
+            <p>
+              Evita que el sistema de calidad sea una carga de oficina y lo convierte en una herramienta real de protección frente a pérdidas de clientes, fallos operativos o costos imprevistos.
+            </p>
+          </div>
+        </div>
+
+        <!-- TAB 2: REAL WORLD EXAMPLES -->
+        <div *ngIf="activePlainTab === 'examples'" class="tab-pane animate-fade-in">
+          <div class="examples-grid">
+            <div *ngFor="let ex of selectedClause.realWorldExamples" class="example-card glass-panel">
+              <div class="example-sector">
+                <span class="badge badge-emerald">{{ ex.industry }}</span>
+              </div>
+              <p class="example-text">{{ ex.example }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 3: AUDITOR CHECKLIST -->
+        <div *ngIf="activePlainTab === 'audit'" class="tab-pane animate-fade-in">
+          <div class="checklist-box">
+            <div class="checklist-header">
+              <span class="badge badge-amber">Evidencias Obligatorias Mínimas</span>
+              <p class="checklist-sub">Presenta esto durante la auditoría y tendrás conformidad garantizada:</p>
+            </div>
+            <ul class="checklist-items">
+              <li *ngFor="let item of selectedClause.auditorChecklist" class="checklist-item">
+                <span class="check-icon">✅</span>
+                <span class="check-text">{{ item }}</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- TAB 4: OFFICIAL TEXT -->
+        <div *ngIf="activePlainTab === 'official'" class="tab-pane animate-fade-in">
+          <div class="official-quote-box">
+            <div class="official-header">
+              <span>Texto literal ISO Internacional:</span>
+            </div>
+            <blockquote class="official-text">
+              "{{ selectedClause.officialText }}"
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     SECTION 3: GAP ANALYSIS & DIAGNÓSTICO DE BRECHAS INTERACTIVO
+     ========================================================================== -->
+<section id="gap-analysis" class="section-padding">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge badge-amber">Módulo C • Autodiagnóstico Express</span>
+      <h2 class="section-title">Calculadora de Madurez & Gap Analysis</h2>
+      <p class="section-desc">
+        Responde a este cuestionario de 5 preguntas clave para conocer tu nivel de preparación frente a las auditorías y normativas actuales.
+      </p>
+    </div>
+
+    <div class="gap-grid">
+      <!-- Questions Column -->
+      <div class="gap-questions glass-panel">
+        <h4 class="gap-title">Preguntas Clave de Diagnóstico</h4>
+        <div *ngFor="let q of gapQuestions" class="gap-question-card">
+          <div class="q-header">
+            <span class="badge badge-cyan">Cláusula {{ q.clause }}</span>
+            <p class="q-text">{{ q.question }}</p>
+          </div>
+          <p class="q-hint">{{ q.hint }}</p>
+
+          <div class="q-options">
+            <button 
+              class="q-opt-btn opt-full"
+              [class.selected]="q.selectedOption === 'full'"
+              (click)="setGapOption(q.id, 'full')">
+              🟢 Implementado Total
+            </button>
+            <button 
+              class="q-opt-btn opt-partial"
+              [class.selected]="q.selectedOption === 'partial'"
+              (click)="setGapOption(q.id, 'partial')">
+              🟡 En Proceso / Parcial
+            </button>
+            <button 
+              class="q-opt-btn opt-none"
+              [class.selected]="q.selectedOption === 'none'"
+              (click)="setGapOption(q.id, 'none')">
+              🔴 No Implementado
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results & Score Dashboard Column -->
+      <div class="gap-results glass-panel">
+        <h4 class="gap-title text-center">Resultado del Autodiagnóstico</h4>
+        
+        <div class="score-circle-container">
+          <div class="score-circle" [style.background]="'conic-gradient(var(--accent-emerald) ' + gapScore + '%, var(--border-subtle) 0)'">
+            <div class="score-inner">
+              <span class="score-value">{{ gapScore }}%</span>
+              <span class="score-sub">Cumplimiento</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-summary text-center">
+          <span class="badge" [ngClass]="gapStatusClass">{{ gapStatusText }}</span>
+        </div>
+
+        <div class="score-breakdown">
+          <h5>📊 Recomendación del Consultor Senior:</h5>
+          <p *ngIf="gapScore >= 80" class="rec-text text-emerald">
+            ¡Excelente nivel! Tu sistema cuenta con bases sólidas. Enfócate en afinar la integración de la Enmienda Climática 2024 y simular auditorías internas.
+          </p>
+          <p *ngIf="gapScore >= 50 && gapScore < 80" class="rec-text text-cyan">
+            Buen avance. Debes formalizar la matriz de riesgos y asegurar que la Alta Dirección lidere las revisiones sin delegación burocrática.
+          </p>
+          <p *ngIf="gapScore < 50" class="rec-text text-amber">
+            Atención prioritaria: Tu organización presenta brechas estructurales. Te recomendamos descargar los Kits Plug & Play para agilizar la documentación en un 70%.
+          </p>
+        </div>
+
+        <button (click)="scrollTo('templates')" class="btn btn-primary btn-block">
+          <span>📦 Descargar Kits de Cierre de Brechas</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     SECTION 4: KITS DE ADOPCIÓN PLUG & PLAY (TEMPLATES)
+     ========================================================================== -->
+<section id="templates" class="section-padding bg-darker">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge badge-cyan">Módulo D • Recursos Operativos</span>
+      <h2 class="section-title">Kits de Implementación "Plug & Play"</h2>
+      <p class="section-desc">
+        Plantillas pre-estructuradas en formatos listos para usar que garantizan cumplimiento normativo sin pérdida de tiempo.
+      </p>
+    </div>
+
+    <div class="templates-grid">
+      <div *ngFor="let t of templates" class="template-card glass-panel">
+        <div class="template-header">
+          <span class="badge badge-emerald">{{ t.clause }}</span>
+          <span class="template-format">{{ t.format }}</span>
+        </div>
+        <h4 class="template-name">{{ t.title }}</h4>
+        <p class="template-desc">{{ t.description }}</p>
+
+        <div class="template-tags">
+          <span *ngFor="let tag of t.tags" class="tag-pill">#{{ tag }}</span>
+        </div>
+
+        <button (click)="openTemplate(t)" class="btn btn-secondary btn-sm btn-block">
+          <span>👁️ Ver Estructura & Campos</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     SECTION 5: GOBERNANZA SSDLC Y BASE DE CONOCIMIENTO
+     ========================================================================== -->
+<section id="ssdlc" class="section-padding">
+  <div class="container">
+    <div class="ssdlc-banner glass-panel">
+      <div class="ssdlc-content">
+        <span class="badge badge-emerald">Gobernanza & Trazabilidad SSDLC</span>
+        <h3 class="ssdlc-title">Base de Conocimiento y Desarrollo Basado en Agentes</h3>
+        <p class="ssdlc-text">
+          Cada solicitud de cambio completada se documenta automáticamente en archivos Markdown modulares con puntos de control (<span class="code-pill">CHK-001</span>) y compuertas de seguridad (<span class="code-pill">Gate 1 a Gate 5</span>).
+        </p>
+
+        <div class="ssdlc-agents-flow">
+          <div class="agent-chip">🕵️ Funcional & SGC</div>
+          <span class="flow-arrow">➔</span>
+          <div class="agent-chip">🛡️ SecArch / STRIDE</div>
+          <span class="flow-arrow">➔</span>
+          <div class="agent-chip">💻 Dev Seguro</div>
+          <span class="flow-arrow">➔</span>
+          <div class="agent-chip">🔍 QA / DAST</div>
+          <span class="flow-arrow">➔</span>
+          <div class="agent-chip">🚀 DevSecOps & KB</div>
+        </div>
+      </div>
+
+      <div class="ssdlc-actions">
+        <a href="https://github.com/dalesos92/iso9001-evolution-platform/tree/main/knowledge_base" target="_blank" class="btn btn-secondary">
+          <span>📖 Explorar Knowledge Base en GitHub</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================================
+     MODAL: PREVISUALIZACIÓN DE PLANTILLA
+     ========================================================================== -->
+<div *ngIf="activeTemplateModal" class="modal-backdrop" (click)="closeTemplate()">
+  <div class="modal-dialog glass-panel" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <div>
+        <span class="badge badge-emerald">{{ activeTemplateModal.clause }}</span>
+        <h3 class="modal-title">{{ activeTemplateModal.title }}</h3>
+      </div>
+      <button class="modal-close" (click)="closeTemplate()">✕</button>
+    </div>
+
+    <div class="modal-body">
+      <p class="modal-desc">{{ activeTemplateModal.description }}</p>
+      
+      <div class="modal-fields-box">
+        <h5>Campos y Columnas Pre-configuradas:</h5>
+        <ul class="modal-fields-list">
+          <li *ngFor="let f of activeTemplateModal.fields" class="field-item">
+            <span class="field-bullet">🔹</span>
+            <span>{{ f }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="modal-poka-note">
+        <strong>💡 Beneficio Poka-Yoke:</strong> Diseñado para ser diligenciado en menos de 1 hora por cualquier líder de área sin necesidad de consultoría externa presencial.
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeTemplate()">Cerrar</button>
+      <button class="btn btn-primary" (click)="closeTemplate()">Descargar / Usar Formato</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================================
+     FOOTER
+     ========================================================================== -->
+<footer class="footer">
+  <div class="container footer-content">
+    <div class="footer-left">
+      <div class="footer-brand">🛡️ ISO 9001 Evolution Platform</div>
+      <p class="footer-sub">Plataforma de comparación y adopción en lenguaje simple y a prueba de fallos.</p>
+    </div>
+
+    <div class="footer-links">
+      <a href="https://github.com/dalesos92/iso9001-evolution-platform" target="_blank">Repositorio GitHub</a>
+      <a (click)="scrollTo('comparador')">Comparador</a>
+      <a (click)="scrollTo('gap-analysis')">Gap Analysis</a>
+      <a (click)="scrollTo('ssdlc')">Gobernanza SSDLC</a>
+    </div>
+  </div>
+
+  <div class="container footer-bottom">
+    <p>© 2026 ISO 9001 Evolution Platform. Diseñado bajo estándares ISO 9001, ISO 9000 & Anexo SL.</p>
+  </div>
+</footer>

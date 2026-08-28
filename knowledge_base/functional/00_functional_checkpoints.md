@@ -9,6 +9,7 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
 | ID | Fecha | Módulo Afectado | Descripción del Cambio / Hito | Estado | Responsable |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **CHK-001** | 2026-08-27 | *Gobernanza / Core* | Definición de Requerimientos Funcionales y Técnicos, Base de Conocimiento .md, y Arquitectura SSDLC Multi-Agente. | ✅ **Aprobado** | Agente Funcional / SGC Lead |
+| **CHK-002** | 2026-08-27 | *Frontend / MVP* | Implementación de Landing Page MVP en Angular (Standalone): Comparador Diff, Ficha Humana ELI5, Gap Analysis interactivo y Kits de Adopción. | ✅ **Aprobado & Compilado** | Agente Funcional & Dev |
 
 ---
 
@@ -25,3 +26,19 @@ Este registro es administrado por el **Agente Funcional**. Cada cambio completad
   - ✅ Estructura de base de conocimiento en `.md` optimizada para lectura y ahorro de tokens.
   - ✅ Marco de 5 agentes especializados para el ciclo SSDLC End-to-End.
   - ✅ Trazabilidad de puntos de control establecida.
+
+---
+
+### 🔹 [CHK-002] Landing Page Index & MVP Interactivo en Angular
+- **Solicitud de Origen:** Creación de Landing Page en Angular como index para mostrar el MVP de la plataforma ISO 9001.
+- **Aspectos Funcionales Entregados:**
+  1. **Hero & Navegación:** Identidad visual de alto impacto (Dark Mode, tipografías Outfit / Plus Jakarta Sans, glassmorphism y métricas rápidas).
+  2. **Comparador Visual de Cláusulas (Diff Engine):** Selector dinámico entre `2015 vs 2026 (Clima)` y `2008 vs 2015` con badges de impacto y tags de estado (`Nuevo`, `Modificado`, `Reubicado`).
+  3. **Ficha "Traducción Humana" (Poka-Yoke):** Componente interactivo de 4 pestañas: *Español Simple (ELI5)*, *Ejemplos Reales*, *Checklist de Auditoría*, *Texto Oficial*.
+  4. **Calculadora Interactiva de Brechas (Gap Analysis):** 5 preguntas clave con selector de 3 estados (🟢/🟡/🔴) y medidor circular de madurez con recomendaciones dinámicas.
+  5. **Kits de Implementación (Plug & Play):** Catálogo de plantillas con modal interactivo de inspección de columnas y campos.
+  6. **Sección SSDLC:** Visibilidad pública de la gobernanza de agentes y enlace directo a la base de conocimiento en GitHub.
+- **Validación Técnica y de Seguridad (SSDLC Gates 1-4):**
+  - ✅ Compilación exitosa con Angular Standalone (`ng build` - 64 kB transfer size).
+  - ✅ Cero dependencias vulnerables (SCA Gate 3).
+  - ✅ Estilos y accesibilidad responsive validados.
